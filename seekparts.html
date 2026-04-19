@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SeekParts – Piese auto originale și aftermarket. Calitate garantată, livrare rapidă în toată România.">
+<meta name="keywords" content="piese auto, piese masini, accesorii auto, piese originale, piese aftermarket">
+<title>SeekParts – Piese Auto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #e8ff00;
+    --accent2: #ff4d00;
+    --text: #f0f0f0;
+    --muted: #666666;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .cart-btn {
+    position: relative;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .cart-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .cart-count {
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    transition: all 0.3s;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 999;
+    padding: 1.5rem 2rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--text); text-decoration: none; font-size: 1.1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+  /* HERO */
+  .hero {
+    margin-top: 64px;
+    padding: 4rem 2rem 2rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* BENTO GRID */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+    margin-top: 64px;
+    padding: 2rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bento-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .bento-card:hover {
+    transform: translateY(-3px);
+    border-color: #333;
+  }
+
+  /* Hero card – full width */
+  .bento-hero {
+    grid-column: span 12;
+    padding: 3rem;
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    position: relative;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .bento-hero::before {
+    content: 'SEEKPARTS';
+    position: absolute;
+    top: -30px;
+    right: -20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11rem;
+    font-weight: 800;
+    color: rgba(232,255,0,0.04);
+    letter-spacing: -5px;
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .bento-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 700px;
+  }
+
+  .bento-hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .bento-hero p {
+    color: var(--muted);
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    max-width: 480px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: #fff; transform: scale(1.03); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Stats card */
+  .bento-stats {
+    grid-column: span 4;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stat { display: flex; flex-direction: column; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+
+  /* Categories card */
+  .bento-cats {
+    grid-column: span 8;
+    padding: 2rem;
+  }
+
+  .bento-cats h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+  }
+
+  .cats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .cat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .cat-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-chip .cat-icon { font-size: 1.8rem; display: block; margin-bottom: 0.4rem; }
+
+  /* Products section */
+  .section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .section-title span { color: var(--accent); }
+
+  .view-all {
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .view-all:hover { color: var(--text); }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.2rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+
+  .search-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.4rem;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .search-btn:hover { background: #fff; }
+
+  /* Filter chips */
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .filter-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .filter-chip:hover, .filter-chip.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,255,0,0.05);
+  }
+
+  /* Products grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .product-card:hover {
+    border-color: #333;
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .product-img {
+    width: 100%;
+    height: 180px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--accent2);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .product-badge.new { background: var(--accent); color: #000; }
+
+  .product-info { padding: 1.2rem; }
+
+  .product-cat {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .product-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .product-compat {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .product-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .product-price .old-price {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: line-through;
+    font-weight: 400;
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .add-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .add-btn:hover { background: #fff; transform: scale(1.1); }
+
+  /* Promo bento row */
+  .promo-bento {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+  }
+
+  .promo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promo-card.highlight {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .promo-card.highlight h3 { color: #000; }
+
+  .promo-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.5px;
+  }
+
+  .promo-card p { opacity: 0.7; font-size: 0.9rem; line-height: 1.5; max-width: 340px; }
+
+  .promo-card .promo-cta {
+    margin-top: 1.5rem;
+    background: #000;
+    color: var(--accent);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .promo-card .promo-cta:hover { background: #111; transform: scale(1.03); }
+
+  .promo-card .big-icon {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    font-size: 8rem;
+    opacity: 0.12;
+  }
+
+  /* Cart sidebar */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    display: none;
+    backdrop-filter: blur(4px);
+  }
+
+  .cart-overlay.open { display: block; }
+
+  .cart-sidebar {
+    position: fixed;
+    top: 0; right: -480px;
+    width: min(480px, 100vw);
+    height: 100vh;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 2001;
+    transition: right 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-sidebar.open { right: 0; }
+
+  .cart-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cart-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .close-btn:hover { color: var(--text); }
+
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .cart-item-icon { font-size: 2rem; flex-shrink: 0; }
+
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+  .cart-item-price { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+  .cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .qty-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .qty-num { font-size: 0.9rem; min-width: 20px; text-align: center; }
+
+  .remove-item {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .remove-item:hover { color: var(--accent2); }
+
+  .cart-empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 0;
+  }
+
+  .cart-empty span { font-size: 3rem; display: block; margin-bottom: 1rem; }
+
+  .cart-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .cart-total-label { color: var(--muted); font-size: 0.9rem; }
+  .cart-total-price { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+
+  .checkout-section { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .payment-methods {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .payment-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* Checkout modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
+
+  .modal-body { padding: 2rem; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; font-weight: 500; }
+
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .payment-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .payment-option {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .payment-option.selected { border-color: var(--accent); color: var(--accent); background: rgba(232,255,0,0.05); }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .modal-footer {
+    padding: 0 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .order-summary-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .order-summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  .order-summary-total span:last-child { color: var(--accent); }
+
+  /* Chatbot */
+  .chatbot-trigger {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    z-index: 1500;
+    box-shadow: 0 8px 30px rgba(232,255,0,0.3);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chatbot-trigger:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(232,255,0,0.4); }
+
+  .chatbot-window {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: min(380px, calc(100vw - 2rem));
+    height: 520px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    z-index: 1500;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+
+  .chatbot-window.open { display: flex; }
+
+  .chatbot-header {
+    padding: 1rem 1.2rem;
+    background: var(--accent);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .chatbot-header-info { display: flex; align-items: center; gap: 0.75rem; }
+  .chatbot-avatar { width: 36px; height: 36px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .chatbot-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .chatbot-status { font-size: 0.75rem; opacity: 0.7; }
+
+  .chatbot-close { background: none; border: none; color: #000; cursor: pointer; font-size: 1.2rem; opacity: 0.7; }
+
+  .chatbot-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .chat-msg {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .chat-msg.bot {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    border-radius: 4px 12px 12px 12px;
+  }
+
+  .chat-msg.user {
+    background: var(--accent);
+    color: #000;
+    align-self: flex-end;
+    border-radius: 12px 4px 12px 12px;
+    font-weight: 500;
+  }
+
+  .chat-typing {
+    align-self: flex-start;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 12px 12px 12px;
+    padding: 0.75rem 1rem;
+    display: none;
+  }
+
+  .chat-typing.visible { display: flex; gap: 4px; align-items: center; }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--muted);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  .chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0 1rem;
+  }
+
+  .chat-suggestion {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .chat-suggestion:hover { border-color: var(--accent); color: var(--accent); }
+
+  .chatbot-input {
+    padding: 0.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .chatbot-input input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.9rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+  }
+
+  .chatbot-input input:focus { border-color: var(--accent); }
+
+  .chatbot-send {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+
+  .chatbot-send:hover { background: #fff; }
+
+  /* Marketing section */
+  .marketing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .marketing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+
+  .marketing-card:hover { border-color: #333; transform: translateY(-2px); }
+
+  .marketing-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .marketing-title { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
+  .marketing-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+  /* Footer */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 4rem 2rem 2rem;
+  }
+
+  .footer-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-brand h3 span { color: var(--accent); }
+  .footer-brand p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 280px; }
+
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .footer-col a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .footer-col a:hover { color: var(--text); }
+
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 1rem;
+  }
+
+  .footer-bottom p { color: var(--muted); font-size: 0.8rem; }
+
+  .social-links { display: flex; gap: 0.75rem; }
+
+  .social-link {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--muted);
+  }
+
+  .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Legal pages */
+  .legal-page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 4000;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+
+  .legal-page.open { display: block; }
+
+  .legal-content {
+    max-width: 800px;
+    margin: 5rem auto 3rem;
+  }
+
+  .legal-content h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
+  }
+
+  .legal-content h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--accent);
+  }
+
+  .legal-content p { color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-size: 0.92rem; }
+
+  .legal-close {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    z-index: 4001;
+  }
+
+  /* Toast */
+  .toast-container {
+    position: fixed;
+    bottom: 7rem;
+    right: 2rem;
+    z-index: 5000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .toast {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.2rem;
+    font-size: 0.88rem;
+    color: var(--text);
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .toast span { color: var(--accent); }
+
+  /* Newsletter */
+  .newsletter-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+  }
+
+  .newsletter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .newsletter-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-text p { color: var(--muted); font-size: 0.9rem; }
+
+  .newsletter-form {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  /* Contact form */
+  .contact-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+  }
+
+  .contact-info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-info-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.2rem; }
+  .contact-info-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .contact-info-value { font-size: 0.92rem; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeOut {
+    to { opacity: 0; transform: translateX(20px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .marketing-grid { grid-template-columns: 1fr 1fr; }
+    .promo-bento { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .bento-stats { grid-column: span 12; flex-direction: row; flex-wrap: wrap; }
+    .bento-cats { grid-column: span 12; }
+    .cats-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .marketing-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .payment-selector { grid-template-columns: repeat(2, 1fr); }
+    .newsletter-card { flex-direction: column; }
+    .newsletter-form { max-width: 100%; width: 100%; }
+    .chatbot-window { right: 0; width: 100vw; bottom: 0; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">Seek<span>Parts</span></div>
+  <ul class="nav-links">
+    <li><a href="#produse">Produse</a></li>
+    <li><a href="#categorii">Categorii</a></li>
+    <li><a href="#marketing">De ce noi</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="cart-btn" onclick="toggleCart()">
+      🛒 Coș <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#produse" onclick="closeMobileMenu()">Produse</a>
+  <a href="#categorii" onclick="closeMobileMenu()">Categorii</a>
+  <a href="#marketing" onclick="closeMobileMenu()">De ce noi</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- BENTO HERO -->
+<div class="bento" id="home">
+  <!-- Hero card -->
+  <div class="bento-card bento-hero">
+    <h1>Piese auto <em>originale</em><br>pentru orice mașină</h1>
+    <p>Peste 50.000 de referințe disponibile. Livrare în 24-48h. Garanție pe toate produsele.</p>
+    <div class="hero-actions">
+      <a href="#produse" class="btn-primary">Explorează produse</a>
+      <a href="#contact" class="btn-ghost">Contactează-ne</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="bento-card bento-stats" id="stats">
+    <div class="stat">
+      <span class="stat-num">50K+</span>
+      <span class="stat-label">Referințe disponibile</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">24h</span>
+      <span class="stat-label">Livrare rapidă</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4.9★</span>
+      <span class="stat-label">Rating clienți</span>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="bento-card bento-cats" id="categorii">
+    <h3>Categorii</h3>
+    <div class="cats-grid">
+      <div class="cat-chip" onclick="filterByCategory('Motor')"><span class="cat-icon">⚙️</span>Motor</div>
+      <div class="cat-chip" onclick="filterByCategory('Frâne')"><span class="cat-icon">🔧</span>Frâne</div>
+      <div class="cat-chip" onclick="filterByCategory('Suspensie')"><span class="cat-icon">🏎️</span>Suspensie</div>
+      <div class="cat-chip" onclick="filterByCategory('Electric')"><span class="cat-icon">⚡</span>Electric</div>
+      <div class="cat-chip" onclick="filterByCategory('Caroserie')"><span class="cat-icon">🚗</span>Caroserie</div>
+      <div class="cat-chip" onclick="filterByCategory('Accesorii')"><span class="cat-icon">✨</span>Accesorii</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<div class="section" id="produse">
+  <div class="section-header">
+    <h2 class="section-title">Produse <span>populare</span></h2>
+    <button class="view-all" onclick="showAll()">Vezi toate →</button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" class="search-input" id="searchInput" placeholder="Caută piesă, cod OEM, marcă..." oninput="handleSearch()">
+    <button class="search-btn" onclick="handleSearch()">Caută</button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters" id="filters">
+    <button class="filter-chip active" onclick="setFilter('Toate', this)">Toate</button>
+    <button class="filter-chip" onclick="setFilter('Motor', this)">Motor</button>
+    <button class="filter-chip" onclick="setFilter('Frâne', this)">Frâne</button>
+    <button class="filter-chip" onclick="setFilter('Suspensie', this)">Suspensie</button>
+    <button class="filter-chip" onclick="setFilter('Electric', this)">Electric</button>
+    <button class="filter-chip" onclick="setFilter('Caroserie', this)">Caroserie</button>
+    <button class="filter-chip" onclick="setFilter('Accesorii', this)">Accesorii</button>
+    <button class="filter-chip" onclick="setFilter('Promo', this)">🔥 Promo</button>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- PROMO BENTO -->
+<div class="promo-bento">
+  <div class="promo-card highlight">
+    <h3>Livrare gratuită<br>peste 200 RON</h3>
+    <p>Comandă acum și beneficiezi de transport gratuit în toată România pentru comenzi ce depășesc 200 RON.</p>
+    <button class="promo-cta" onclick="document.getElementById('produse').scrollIntoView({behavior:'smooth'})">Cumpără acum</button>
+    <span class="big-icon">🚚</span>
+  </div>
+  <div class="promo-card">
+    <h3>Garanție<br>12 luni</h3>
+    <p>Toate produsele noastre beneficiază de garanție de minimum 12 luni și suport tehnic dedicat.</p>
+    <button class="btn-ghost" style="margin-top:1.5rem" onclick="openLegal('garantie')">Detalii garanție</button>
+    <span class="big-icon">🛡️</span>
+  </div>
+</div>
+
+<!-- MARKETING SECTION -->
+<div class="section" id="marketing">
+  <div class="section-header">
+    <h2 class="section-title">De ce <span>SeekParts</span>?</h2>
+  </div>
+  <div class="marketing-grid">
+    <div class="marketing-card">
+      <div class="marketing-icon">🔍</div>
+      <div class="marketing-title">SEO & Vizibilitate</div>
+      <div class="marketing-desc">Găsești produsele noastre rapid pe Google datorită optimizării SEO avansate — căutare după cod OEM, marcă, model sau categorie.</div>
+    </div>
+    <div class="marketing-card">
+      <div class="marketing-icon">📱</div>
+      <div class="marketing-title">Social Media</div>
+      <div class="marketing-desc">Urmărește-ne pe Instagram și TikTok pentru tutoriale montaj, oferte exclusive și review-uri de produse săptămânale.</div>
+    </div>
+    <div class="marketing-card">
+      <div class="marketing-icon">✉️</div>
+      <div class="marketing-title">Email Marketing</div>
+      <div class="marketing-desc">Abonează-te la newsletter și primești oferte personalizate bazate pe vehiculul tău și istoricul de comenzi.</div>
+    </div>
+    <div class="marketing-card">
+      <div class="marketing-icon">🤖</div>
+      <div class="marketing-title">AI Assistant</div>
+      <div class="marketing-desc">Chatbot-ul nostru AI te ajută să găsești piesa potrivită instant, 24/7, fără să aștepți un agent uman.</div>
+    </div>
+    <div class="marketing-card">
+      <div class="marketing-icon">♻️</div>
+      <div class="marketing-title">Eco-Friendly</div>
+      <div class="marketing-desc">Ambalaje 100% reciclabile, parteneriate cu curierat verde și gamă de piese reutilizate certificate ecologic.</div>
+    </div>
+    <div class="marketing-card">
+      <div class="marketing-icon">💳</div>
+      <div class="marketing-title">Plăți Multiple</div>
+      <div class="marketing-desc">Card bancar, PayPal, Apple Pay, Google Pay și plată ramburs — toate opțiunile disponibile cu un singur click.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-section">
+  <div class="newsletter-card">
+    <div class="newsletter-text">
+      <h3>Rămâi la curent cu ofertele</h3>
+      <p>Abonează-te și primești -10% la prima comandă + oferte exclusive săptămânal.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="email" class="search-input" id="newsletterEmail" placeholder="adresa@email.ro">
+      <button class="search-btn" onclick="subscribeNewsletter()">Abonare</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT SECTION -->
+<div class="contact-section" id="contact">
+  <div class="section-header">
+    <h2 class="section-title">Contact & <span>Feedback</span></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.5rem;">Informații de contact</h3>
+      <div class="contact-info-item">
+        <span class="contact-info-icon">🏢</span>
+        <div>
+          <div class="contact-info-label">Firmă</div>
+          <div class="contact-info-value">SeekParts SRL<br>CUI: RO12345678<br>J40/1234/2025</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-icon">📍</span>
+        <div>
+          <div class="contact-info-label">Adresă</div>
+          <div class="contact-info-value">Str. Industriilor 42<br>Timișoara, România</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-icon">📞</span>
+        <div>
+          <div class="contact-info-label">Telefon</div>
+          <div class="contact-info-value">0256 123 456</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-icon">✉️</span>
+        <div>
+          <div class="contact-info-label">Email</div>
+          <div class="contact-info-value">contact@seekparts.ro</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-icon">⏰</span>
+        <div>
+          <div class="contact-info-label">Program</div>
+          <div class="contact-info-value">Luni-Vineri: 9:00 – 18:00<br>Sâmbătă: 9:00 – 13:00</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-card">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.5rem;">Trimite un mesaj</h3>
+      <div class="form-group">
+        <label class="form-label">Numele tău</label>
+        <input type="text" class="form-input" id="contactName" placeholder="Ion Popescu">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="contactEmail" placeholder="ion@email.ro">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subiect</label>
+        <input type="text" class="form-input" id="contactSubject" placeholder="Informații produs, reclamație...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mesaj</label>
+        <textarea class="form-input" id="contactMessage" rows="4" placeholder="Scrie mesajul tău..." style="resize:vertical"></textarea>
+      </div>
+      <button class="btn-primary" onclick="sendContactForm()" style="width:100%;text-align:center">Trimite mesajul</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>Seek<span>Parts</span></h3>
+      <p>Partenerul tău de încredere pentru piese auto. Calitate garantată, prețuri competitive, livrare rapidă.</p>
+      <div class="social-links" style="margin-top:1.5rem">
+        <a class="social-link" href="#" title="Facebook">f</a>
+        <a class="social-link" href="#" title="Instagram">ig</a>
+        <a class="social-link" href="#" title="TikTok">tt</a>
+        <a class="social-link" href="#" title="YouTube">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Produse</h4>
+      <ul>
+        <li><a onclick="filterByCategory('Motor')">Motor</a></li>
+        <li><a onclick="filterByCategory('Frâne')">Frâne</a></li>
+        <li><a onclick="filterByCategory('Suspensie')">Suspensie</a></li>
+        <li><a onclick="filterByCategory('Electric')">Electric</a></li>
+        <li><a onclick="filterByCategory('Accesorii')">Accesorii</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informații</h4>
+      <ul>
+        <li><a onclick="openLegal('termeni')">Termeni și condiții</a></li>
+        <li><a onclick="openLegal('confidentialitate')">Politica de confidențialitate</a></li>
+        <li><a onclick="openLegal('retur')">Politica de retur</a></li>
+        <li><a onclick="openLegal('garantie')">Garanție</a></li>
+        <li><a onclick="openLegal('gdpr')">GDPR</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Cont</h4>
+      <ul>
+        <li><a href="#">Înregistrare</a></li>
+        <li><a href="#">Autentificare</a></li>
+        <li><a href="#">Comenzile mele</a></li>
+        <li><a href="#">Lista de dorințe</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 SeekParts SRL. Toate drepturile rezervate. CUI: RO12345678</p>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+      <span class="payment-badge">💳 Card</span>
+      <span class="payment-badge">🅿️ PayPal</span>
+      <span class="payment-badge"> Apple Pay</span>
+      <span class="payment-badge">G Google Pay</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CART OVERLAY & SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>Coșul tău 🛒</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <span>🛒</span>
+      Coșul tău este gol.<br>Adaugă produse pentru a continua!
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total comandă</span>
+      <span class="cart-total-price" id="cartTotal">0 RON</span>
+    </div>
+    <div class="checkout-section">
+      <button class="btn-primary" onclick="openCheckout()" style="width:100%;text-align:center">Finalizează comanda</button>
+      <div class="payment-methods">
+        <span class="payment-badge">💳 Card</span>
+        <span class="payment-badge">🅿️ PayPal</span>
+        <span class="payment-badge"> Apple Pay</span>
+        <span class="payment-badge">G Pay</span>
+        <span class="payment-badge">📦 Ramburs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Finalizare comandă</h2>
+      <button class="close-btn" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="orderSummaryLines"></div>
+      <hr class="section-divider">
+      <p style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem">Date personale</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prenume</label>
+          <input type="text" class="form-input" placeholder="Ion">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nume</label>
+          <input type="text" class="form-input" placeholder="Popescu">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="ion@email.ro">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefon</label>
+        <input type="tel" class="form-input" placeholder="07xx xxx xxx">
+      </div>
+      <hr class="section-divider">
+      <p style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem">Adresă livrare</p>
+      <div class="form-group">
+        <label class="form-label">Stradă și număr</label>
+        <input type="text" class="form-input" placeholder="Str. Exemplu nr. 10">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Oraș</label>
+          <input type="text" class="form-input" placeholder="Timișoara">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Județ</label>
+          <input type="text" class="form-input" placeholder="Timiș">
+        </div>
+      </div>
+      <hr class="section-divider">
+      <p style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.75rem">Metodă de plată</p>
+      <div class="payment-selector">
+        <div class="payment-option selected" onclick="selectPayment(this)">💳 Card bancar</div>
+        <div class="payment-option" onclick="selectPayment(this)">🅿️ PayPal</div>
+        <div class="payment-option" onclick="selectPayment(this)"> Apple Pay</div>
+        <div class="payment-option" onclick="selectPayment(this)">📦 Ramburs</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="order-summary-total">
+        <span>Total</span>
+        <span id="checkoutTotal">0 RON</span>
+      </div>
+      <button class="btn-primary" onclick="placeOrder()" style="width:100%;text-align:center">Plasează comanda 🚀</button>
+      <p style="text-align:center;font-size:0.75rem;color:var(--muted)">Prin plasarea comenzii, ești de acord cu <a onclick="openLegal('termeni')" style="color:var(--accent);cursor:pointer">Termenii și condițiile</a> noastre.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LEGAL PAGES -->
+<div class="legal-page" id="legal-termeni">
+  <button class="legal-close" onclick="closeLegal('termeni')">← Înapoi</button>
+  <div class="legal-content">
+    <h1>Termeni și Condiții</h1>
+    <h2>1. Informații generale</h2>
+    <p>SeekParts SRL, cu sediul în Timișoara, Str. Industriilor 42, CUI RO12345678, J40/1234/2025, operează platforma seekparts.ro.</p>
+    <h2>2. Produse și prețuri</h2>
+    <p>Prețurile afișate includ TVA conform legislației române în vigoare. Disponibilitatea produselor este actualizată în timp real.</p>
+    <h2>3. Comanda și contractul</h2>
+    <p>Plasarea unei comenzi reprezintă o ofertă de cumpărare. Contractul se încheie la confirmarea comenzii prin email. Procesăm comenzile în 1-2 zile lucrătoare.</p>
+    <h2>4. Livrare</h2>
+    <p>Livrarea se realizează în 24-48h prin curieri parteneri. Livrarea este gratuită pentru comenzi peste 200 RON. Pentru comenzi sub această valoare, taxa de transport este de 15 RON.</p>
+    <h2>5. Garanție</h2>
+    <p>Toate produsele beneficiază de garanție legală de minimum 2 ani conform OUG 140/2021. Garanția comercială suplimentară variază în funcție de producător.</p>
+    <h2>6. Dreptul de retragere</h2>
+    <p>Conform OUG 34/2014, aveți dreptul de a vă retrage din contract în termen de 14 zile de la primirea produsului, fără a justifica decizia.</p>
+    <h2>7. Modalități de plată</h2>
+    <p>Acceptăm plata cu card bancar (Visa, Mastercard), PayPal, Apple Pay, Google Pay și ramburs la livrare. Tranzacțiile online sunt securizate prin SSL.</p>
+  </div>
+</div>
+
+<div class="legal-page" id="legal-confidentialitate">
+  <button class="legal-close" onclick="closeLegal('confidentialitate')">← Înapoi</button>
+  <div class="legal-content">
+    <h1>Politica de Confidențialitate</h1>
+    <h2>1. Date colectate</h2>
+    <p>Colectăm: nume, email, adresă, telefon (pentru procesarea comenzilor), date de navigare (pentru îmbunătățirea experienței).</p>
+    <h2>2. Scopul prelucrării</h2>
+    <p>Datele sunt procesate pentru: onorarea comenzilor, comunicare cu clienții, personalizarea recomandărilor, marketing (cu consimțământ explicit).</p>
+    <h2>3. Drepturile tale</h2>
+    <p>Conform GDPR, ai dreptul la: acces, rectificare, ștergere, portabilitate și opoziție. Contactează-ne la privacy@seekparts.ro pentru orice solicitare.</p>
+    <h2>4. Cookies</h2>
+    <p>Folosim cookies necesare funcționării, cookies de performanță (Google Analytics) și cookies de marketing. Poți gestiona preferințele în orice moment.</p>
+    <h2>5. Retenție date</h2>
+    <p>Datele comenzilor se rețin 5 ani conform obligațiilor fiscale. Datele de marketing se șterg la retragerea consimțământului.</p>
+  </div>
+</div>
+
+<div class="legal-page" id="legal-retur">
+  <button class="legal-close" onclick="closeLegal('retur')">← Înapoi</button>
+  <div class="legal-content">
+    <h1>Politica de Retur</h1>
+    <h2>Condiții de retur</h2>
+    <p>Acceptăm returul produselor în termen de 14 zile de la primire, dacă: produsul este în starea originală, nefolosit, în ambalajul original, însoțit de factură.</p>
+    <h2>Cum inițiezi un retur</h2>
+    <p>Trimite un email la retur@seekparts.ro cu numărul comenzii și motivul returului. Îți vom trimite eticheta de retur în 24h.</p>
+    <h2>Rambursare</h2>
+    <p>Rambursarea se realizează în 5-7 zile lucrătoare de la primirea și verificarea produsului returnat, prin aceeași metodă de plată utilizată inițial.</p>
+    <h2>Produse excluse de la retur</h2>
+    <p>Nu putem accepta returul produselor care au fost montate/folosite, produselor comandate special, lichidelor și produselor perisabile.</p>
+  </div>
+</div>
+
+<div class="legal-page" id="legal-garantie">
+  <button class="legal-close" onclick="closeLegal('garantie')">← Înapoi</button>
+  <div class="legal-content">
+    <h1>Politica de Garanție</h1>
+    <h2>Garanție legală</h2>
+    <p>Conform OUG 140/2021, toate produsele beneficiază de garanție legală de 2 ani. Aceasta acoperă defecte de fabricație și neconformități cu descrierea.</p>
+    <h2>Garanție comercială</h2>
+    <p>Suplimentar, oferim garanție comercială de 12 luni pe toate produsele din stoc propriu. Produsele de la branduri premium pot beneficia de garanție extinsă de 24-36 luni.</p>
+    <h2>Cum revendici garanția</h2>
+    <p>Contactează-ne la garantie@seekparts.ro sau 0256 123 456. Vei primi instrucțiunile de trimitere a produsului. Repararea sau înlocuirea se realizează în 15 zile lucrătoare.</p>
+  </div>
+</div>
+
+<div class="legal-page" id="legal-gdpr">
+  <button class="legal-close" onclick="closeLegal('gdpr')">← Înapoi</button>
+  <div class="legal-content">
+    <h1>Informații GDPR</h1>
+    <h2>Operator de date</h2>
+    <p>SeekParts SRL, CUI RO12345678, Timișoara, Str. Industriilor 42. Contact DPO: dpo@seekparts.ro.</p>
+    <h2>Drepturile tale conform GDPR</h2>
+    <p><strong>Dreptul de acces:</strong> Poți solicita o copie a tuturor datelor pe care le deținem despre tine.</p>
+    <p><strong>Dreptul la rectificare:</strong> Poți corecta datele inexacte oricând.</p>
+    <p><strong>Dreptul la ștergere ("dreptul de a fi uitat"):</strong> Poți solicita ștergerea datelor tale, cu excepția celor impuse de lege.</p>
+    <p><strong>Dreptul la portabilitate:</strong> Poți primi datele tale în format structurat, lizibil automat.</p>
+    <p><strong>Dreptul la opoziție:</strong> Te poți opune prelucrării datelor în scop de marketing direct.</p>
+    <h2>Reclamații</h2>
+    <p>Dacă considerați că drepturile vă sunt încălcate, puteți depune o reclamație la ANSPDCP (www.dataprotection.ro).</p>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<button class="chatbot-trigger" onclick="toggleChat()" id="chatTrigger" title="Asistent AI SeekParts">🤖</button>
+
+<div class="chatbot-window" id="chatWindow">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info">
+      <div class="chatbot-avatar">🤖</div>
+      <div>
+        <div class="chatbot-name">AutoBot by SeekParts</div>
+        <div class="chatbot-status">Online • Răspunde instant</div>
+      </div>
+    </div>
+    <button class="chatbot-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chatbot-messages" id="chatMessages">
+    <div class="chat-msg bot">
+      Salut! Sunt AutoBot, asistentul virtual SeekParts 👋<br><br>
+      Te pot ajuta să găsești piesa potrivită, să verifici disponibilitatea sau să urmărești o comandă.
+    </div>
+  </div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button class="chat-suggestion" onclick="sendSuggestion('Caut plăcuțe de frână pentru BMW E46')">Plăcuțe frână BMW</button>
+    <button class="chat-suggestion" onclick="sendSuggestion('Ce filtre de ulei aveți?')">Filtre ulei</button>
+    <button class="chat-suggestion" onclick="sendSuggestion('Cum funcționează returul?')">Info retur</button>
+    <button class="chat-suggestion" onclick="sendSuggestion('Livrare rapidă?')">Livrare</button>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="chatInput" placeholder="Scrie un mesaj..." onkeypress="if(event.key==='Enter')sendChat()">
+    <button class="chatbot-send" onclick="sendChat()">→</button>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== DATA =====
+const products = [
+  { id: 1, name: 'Plăcuțe frână față Bosch', cat: 'Frâne', compat: 'BMW E46 / E90 / E36', price: 189, oldPrice: 240, icon: '🔧', badge: 'Promo' },
+  { id: 2, name: 'Filtru ulei Mann HU 6019 z', cat: 'Motor', compat: 'VW Golf / Passat / Tiguan', price: 45, oldPrice: null, icon: '⚙️', badge: null },
+  { id: 3, name: 'Amortizor față Bilstein B4', cat: 'Suspensie', compat: 'Audi A4 / A6 B7/B8', price: 520, oldPrice: 680, icon: '🏎️', badge: 'Promo' },
+  { id: 4, name: 'Bec far LED H7 6000K', cat: 'Electric', compat: 'Universal', price: 89, oldPrice: null, icon: '⚡', badge: 'New' },
+  { id: 5, name: 'Bara față față Opel Astra J', cat: 'Caroserie', compat: 'Opel Astra J 2010-2016', price: 340, oldPrice: 420, icon: '🚗', badge: null },
+  { id: 6, name: 'Covorașe auto cauciuc 4D', cat: 'Accesorii', compat: 'Universal', price: 125, oldPrice: null, icon: '✨', badge: 'New' },
+  { id: 7, name: 'Disc frână față EBC', cat: 'Frâne', compat: 'Mercedes C-Class W204', price: 210, oldPrice: 260, icon: '🔧', badge: 'Promo' },
+  { id: 8, name: 'Kit distribuție Dayco', cat: 'Motor', compat: 'Renault Megane 1.5 dCi', price: 380, oldPrice: null, icon: '⚙️', badge: null },
+  { id: 9, name: 'Arc suspensie față Eibach', cat: 'Suspensie', compat: 'Ford Focus Mk3', price: 290, oldPrice: 360, icon: '🏎️', badge: null },
+  { id: 10, name: 'Senzor parcare spate', cat: 'Electric', compat: 'Universal 19mm', price: 65, oldPrice: null, icon: '⚡', badge: null },
+  { id: 11, name: 'Capotă motor Toyota Yaris', cat: 'Caroserie', compat: 'Toyota Yaris 2014-2020', price: 850, oldPrice: null, icon: '🚗', badge: null },
+  { id: 12, name: 'Cameră retrovizoare 4K', cat: 'Accesorii', compat: 'Universal', price: 175, oldPrice: 220, icon: '✨', badge: 'Promo' },
+];
+
+let cart = [];
+let currentFilter = 'Toate';
+let searchQuery = '';
+
+// ===== PRODUCTS =====
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  let filtered = products;
+  if (currentFilter !== 'Toate') {
+    if (currentFilter === 'Promo') filtered = products.filter(p => p.badge === 'Promo');
+    else filtered = products.filter(p => p.cat === currentFilter);
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.compat.toLowerCase().includes(q));
+  }
+  grid.innerHTML = filtered.length === 0 ? `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Niciun produs găsit. Încearcă altă căutare.</div>` : filtered.map(p => `
+    <div class="product-card" onclick="">
+      <div class="product-img">
+        ${p.icon}
+        ${p.badge ? `<span class="product-badge ${p.badge === 'New' ? 'new' : ''}">${p.badge}</span>` : ''}
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.cat}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-compat">Compatibil: ${p.compat}</div>
+        <div class="product-footer">
+          <div class="product-price">
+            ${p.oldPrice ? `<span class="old-price">${p.oldPrice} RON</span>` : ''}
+            ${p.price} RON
+          </div>
+          <button class="add-btn" onclick="addToCart(${p.id})" title="Adaugă în coș">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function filterByCategory(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.classList.toggle('active', c.textContent === cat);
+  });
+  document.getElementById('produse').scrollIntoView({ behavior: 'smooth' });
+  renderProducts();
+}
+
+function handleSearch() {
+  searchQuery = document.getElementById('searchInput').value;
+  renderProducts();
+}
+
+function showAll() {
+  currentFilter = 'Toate';
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.filter-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+  renderProducts();
+}
+
+// ===== CART =====
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const existing = cart.find(i => i.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...product, qty: 1 });
+  updateCartUI();
+  showToast(`✓ ${product.name} adăugat în coș`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+}
+
+function updateQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById('cartCount').textContent = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cartTotal').textContent = total + ' RON';
+  document.getElementById('checkoutTotal').textContent = total + ' RON';
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = `<div class="cart-empty"><span>🛒</span>Coșul tău este gol.<br>Adaugă produse pentru a continua!</div>`;
+  } else {
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <span class="cart-item-icon">${item.icon}</span>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">${item.price} RON</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-item" onclick="removeFromCart(${item.id})">🗑️</button>
+      </div>
+    `).join('');
+  }
+  // Order summary in checkout
+  const summaryEl = document.getElementById('orderSummaryLines');
+  if (summaryEl) {
+    summaryEl.innerHTML = `<p style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.75rem">Sumar comandă</p>` +
+      cart.map(i => `<div class="order-summary-line"><span>${i.name} ×${i.qty}</span><span>${i.price * i.qty} RON</span></div>`).join('') +
+      `<div class="order-summary-line"><span>Transport</span><span>${total > 200 ? 'Gratuit' : '15 RON'}</span></div>`;
+  }
+}
+
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function openCheckout() {
+  if (cart.length === 0) { showToast('Coșul tău este gol!'); return; }
+  toggleCart();
+  document.getElementById('checkoutModal').classList.add('open');
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+}
+
+function selectPayment(el) {
+  document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function placeOrder() {
+  cart = [];
+  updateCartUI();
+  closeCheckout();
+  showToast('🎉 Comandă plasată cu succes! Vei primi un email de confirmare.');
+}
+
+// ===== LEGAL =====
+function openLegal(page) {
+  document.getElementById('legal-' + page).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLegal(page) {
+  document.getElementById('legal-' + page).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== CHATBOT =====
+const botResponses = {
+  'frână': 'Avem o gamă completă de piese pentru sistemul de frânare: plăcuțe, discuri, cilindri și lichid de frână. Ce mașină ai?',
+  'motor': 'Pentru sistemul motor avem filtre (ulei, aer, combustibil), curea distribuție, bujii, senzori și multe altele. Spune-mi modelul mașinii!',
+  'livrare': 'Livrăm în 24-48h prin Fan Courier și DPD în toată România. Livrarea e gratuită peste 200 RON!',
+  'retur': 'Ai 14 zile la dispoziție pentru retur, fără nicio justificare. Produsul trebuie să fie în starea originală. Contactează-ne la retur@seekparts.ro.',
+  'preț': 'Prețurile noastre includ TVA și sunt actualizate zilnic. Avem și promo-uri săptămânale!',
+  'garanție': 'Toate produsele au garanție legală de 2 ani + garanție comercială de 12 luni de la noi.',
+  'platit': 'Acceptăm: card bancar (Visa/Mastercard), PayPal, Apple Pay, Google Pay și ramburs la livrare.',
+  'plată': 'Acceptăm: card bancar (Visa/Mastercard), PayPal, Apple Pay, Google Pay și ramburs la livrare.',
+  'bmw': 'Avem piese pentru toată gama BMW: Seria 1, 3, 5, X3, X5 etc. Ce model ai și ce piesă cauți?',
+  'vw': 'Golf, Passat, Tiguan, Polo — avem stoc bogat pentru toate modelele VW. Ce piesă îți trebuie?',
+  'filtru': 'Avem filtre de ulei, aer, combustibil și habitaclu pentru toate mărcile. Spune-mi modelul mașinii!',
+  'default': 'Înțeleg! Voi verifica disponibilitatea pentru tine. Poți da mai multe detalii despre mașina ta (marcă, model, an fabricație) pentru a-ți oferi cea mai bună recomandare?',
+};
+
+function getResponse(msg) {
+  const lower = msg.toLowerCase();
+  for (const key of Object.keys(botResponses)) {
+    if (lower.includes(key)) return botResponses[key];
+  }
+  return botResponses.default;
+}
+
+function toggleChat() {
+  document.getElementById('chatWindow').classList.toggle('open');
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addChatMsg(msg, 'user');
+  document.getElementById('chatSuggestions').style.display = 'none';
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing visible';
+  typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  document.getElementById('chatMessages').appendChild(typing);
+  scrollChat();
+  setTimeout(() => {
+    typing.remove();
+    addChatMsg(getResponse(msg), 'bot');
+  }, 1200);
+}
+
+function sendSuggestion(msg) {
+  document.getElementById('chatInput').value = msg;
+  sendChat();
+}
+
+function addChatMsg(text, type) {
+  const el = document.createElement('div');
+  el.className = `chat-msg ${type}`;
+  el.textContent = text;
+  document.getElementById('chatMessages').appendChild(el);
+  scrollChat();
+}
+
+function scrollChat() {
+  const msgs = document.getElementById('chatMessages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span>✓</span> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3200);
+}
+
+// ===== NEWSLETTER =====
+function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email || !email.includes('@')) { showToast('Introdu o adresă de email validă!'); return; }
+  document.getElementById('newsletterEmail').value = '';
+  showToast('🎉 Abonare reușită! Verifică emailul pentru -10% reducere.');
+}
+
+// ===== CONTACT =====
+function sendContactForm() {
+  const name = document.getElementById('contactName').value;
+  const email = document.getElementById('contactEmail').value;
+  if (!name || !email) { showToast('Completează toate câmpurile obligatorii!'); return; }
+  document.getElementById('contactName').value = '';
+  document.getElementById('contactEmail').value = '';
+  document.getElementById('contactSubject').value = '';
+  document.getElementById('contactMessage').value = '';
+  showToast('✉️ Mesaj trimis! Îți răspundem în 24h.');
+}
+
+// ===== INIT =====
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>

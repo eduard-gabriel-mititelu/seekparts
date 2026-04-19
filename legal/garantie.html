@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Politica de garanție – SeekParts SRL. Garanție legală 2 ani + garanție comercială 12 luni." />
+  <title>Politica de Garanție – SeekParts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--border:#2a2a2a;--accent:#e8ff00;--accent2:#ff4d00;--text:#f0f0f0;--muted:#666666;--radius:14px;--radius-sm:8px;--nav-h:64px;}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+    nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(10,10,10,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;z-index:1000;}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;text-decoration:none;color:var(--text);}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{color:var(--muted);font-size:0.88rem;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--accent);}
+    .page-content{max-width:760px;margin:0 auto;padding:calc(var(--nav-h)+3rem) 2rem 5rem;}
+    .legal-header{margin-bottom:3rem;}
+    .legal-tag{display:inline-block;background:rgba(232,255,0,0.1);border:1px solid rgba(232,255,0,0.2);border-radius:50px;padding:0.3rem 0.9rem;font-size:0.75rem;color:var(--accent);font-weight:600;margin-bottom:1rem;}
+    .legal-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-1px;margin-bottom:0.5rem;}
+    .legal-title span{color:var(--accent);}
+    .legal-meta{color:var(--muted);font-size:0.82rem;}
+    .legal-section{margin-bottom:2.5rem;}
+    .legal-section h2{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--accent);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+    .legal-section p{color:var(--muted);line-height:1.8;font-size:0.9rem;margin-bottom:0.75rem;}
+    .legal-section p strong{color:var(--text);}
+    .legal-section ul{padding-left:1.25rem;color:var(--muted);font-size:0.9rem;line-height:1.8;display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.75rem;}
+    .info-box{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1rem;}
+    .info-box p{color:var(--text);font-size:0.85rem;margin:0;}
+    .warning-box{background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.2);border-left:3px solid var(--accent2);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1rem;}
+    .warning-box p{color:var(--muted);font-size:0.85rem;margin:0;}
+    .garantie-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+    .garantie-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.5rem;}
+    .garantie-card.highlight{border-color:rgba(232,255,0,0.3);background:rgba(232,255,0,0.04);}
+    .garantie-card h4{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;}
+    .garantie-card .duration{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-1px;margin-bottom:0.4rem;}
+    .garantie-card p{color:var(--muted);font-size:0.8rem;line-height:1.5;margin:0;}
+    .steps{display:flex;flex-direction:column;gap:0.75rem;}
+    .step-item{display:flex;gap:1rem;align-items:flex-start;}
+    .step-num{width:28px;height:28px;background:var(--accent);color:#000;border-radius:50%;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;}
+    .step-text{color:var(--muted);font-size:0.88rem;line-height:1.6;padding-top:0.2rem;}
+    .step-text strong{color:var(--text);}
+    footer{background:var(--surface);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--muted);text-decoration:none;}
+    footer a:hover{color:var(--accent);}
+    .legal-nav{display:flex;gap:1rem;flex-wrap:wrap;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+    .legal-nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:0.6rem 1.2rem;border-radius:var(--radius-sm);text-decoration:none;font-size:0.82rem;transition:all 0.2s;}
+    .legal-nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+    @media(max-width:480px){.garantie-cards{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <a href="../index.html" class="nav-back">← Înapoi la magazin</a>
+  </nav>
+
+  <div class="page-content">
+    <div class="legal-header">
+      <div class="legal-tag">Document legal</div>
+      <h1 class="legal-title">Politica de <span>Garanție</span></h1>
+      <p class="legal-meta">Ultima actualizare: 1 ianuarie 2025 · Conform OUG 140/2021</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Tipuri de garanție</h2>
+      <div class="garantie-cards">
+        <div class="garantie-card">
+          <h4>Garanție legală</h4>
+          <div class="duration">2 ani</div>
+          <p>Obligatorie prin lege (OUG 140/2021). Acoperă defectele de conformitate existente la momentul livrării.</p>
+        </div>
+        <div class="garantie-card highlight">
+          <h4>Garanție comercială SeekParts</h4>
+          <div class="duration">12 luni</div>
+          <p>Garanție suplimentară oferită de SeekParts pe toate produsele din stoc propriu.</p>
+        </div>
+      </div>
+      <div class="info-box">
+        <p>🛡️ Garanția comercială nu înlocuiește, ci completează garanția legală. Beneficiezi de ambele simultan.</p>
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Ce acoperă garanția</h2>
+      <p>Garanția acoperă:</p>
+      <ul>
+        <li>Defecte de fabricație (material, asamblare, funcționare)</li>
+        <li>Neconformități față de specificațiile tehnice declarate de producător</li>
+        <li>Deteriorări apărute în condiții normale de utilizare</li>
+        <li>Defecțiuni apărute fără intervenție externă neautorizată</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Ce NU acoperă garanția</h2>
+      <div class="warning-box">
+        <p>⚠️ Garanția este anulată în următoarele situații:</p>
+      </div>
+      <ul>
+        <li>Montaj incorect sau neconform cu specificațiile producătorului</li>
+        <li>Uzură normală (filtre, plăcuțe, lichide etc.)</li>
+        <li>Deteriorări cauzate de accidente, șocuri mecanice sau inundații</li>
+        <li>Modificări neautorizate ale produsului</li>
+        <li>Utilizarea produsului în alt scop decât cel declarat</li>
+        <li>Deteriorări cauzate de utilizarea unor fluide sau produse chimice necorespunzătoare</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Cum revendici garanția</h2>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">Contactează-ne la <strong>garantie@seekparts.ro</strong> sau <strong>0256 123 456</strong> cu descrierea defectului și numărul facturii/comenzii.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Vei primi în <strong>24 ore lucrătoare</strong> instrucțiunile de expediere și eticheta de transport (gratuit în contul nostru).</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Produsul este evaluat de tehnicieni în <strong>5 zile lucrătoare</strong> de la primire.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">În funcție de evaluare: <strong>reparare, înlocuire cu produs identic</strong> sau rambursare integrală. Soluția se comunică în scris.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-text">Produsul reparat sau înlocuit este expediat înapoi în <strong>maxim 15 zile lucrătoare</strong> de la primirea reclamației.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Garanție extinsă pentru branduri premium</h2>
+      <p>Produsele de la anumiți producători beneficiază de garanție extinsă:</p>
+      <ul>
+        <li><strong>Bosch, Brembo, Bilstein:</strong> 24 luni garanție comercială</li>
+        <li><strong>TRW, ATE, Ferodo:</strong> 18 luni garanție comercială</li>
+        <li><strong>Gates, Contitech:</strong> 24 luni sau 60.000 km (prima condiție îndeplinită)</li>
+      </ul>
+      <p>Durata garanției specifice este menționată în fișa de produs.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Baza legală</h2>
+      <p>Garanția legală este reglementată de <strong>OUG 140/2021</strong> privind anumite aspecte referitoare la contractele de vânzare de bunuri, care transpune Directiva UE 2019/771.</p>
+      <p>Consumatorii pot sesiza litigiile la <strong>ANPC (Autoritatea Națională pentru Protecția Consumatorilor)</strong>: <strong>www.anpc.ro</strong> sau 021 9551.</p>
+    </div>
+
+    <div class="legal-nav">
+      <a href="termeni.html" class="legal-nav-btn">← Termeni și condiții</a>
+      <a href="retur.html" class="legal-nav-btn">← Politica de retur</a>
+      <a href="confidentialitate.html" class="legal-nav-btn">Confidențialitate →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 · <a href="../contact.html">Contact</a></p>
+  </footer>
+</body>
+</html>

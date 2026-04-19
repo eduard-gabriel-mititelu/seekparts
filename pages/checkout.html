@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Finalizare comandă – SeekParts" />
+  <title>Finalizare comandă – SeekParts</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #1a1a1a; --surface3: #222222;
+      --border: #2a2a2a; --accent: #e8ff00; --accent2: #ff4d00;
+      --text: #f0f0f0; --muted: #666666;
+      --radius: 14px; --radius-sm: 8px; --nav-h: 64px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; z-index: 1000;
+    }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text); letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-back { color: var(--muted); font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+
+    /* STEPS */
+    .checkout-steps {
+      display: flex; align-items: center; gap: 0; justify-content: center;
+      padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+      margin-top: var(--nav-h);
+      background: var(--surface);
+    }
+
+    .step {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; color: var(--muted); font-weight: 500;
+    }
+    .step.active { color: var(--accent); }
+    .step.done   { color: var(--text); }
+
+    .step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
+    }
+    .step.active .step-num { background: var(--accent); color: #000; border-color: var(--accent); }
+    .step.done   .step-num { background: #00c864; color: #fff; border-color: #00c864; }
+
+    .step-sep { width: 40px; height: 1px; background: var(--border); margin: 0 0.75rem; }
+
+    /* PAGE */
+    .page-content { max-width: 1050px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+    /* LAYOUT: form + sumar */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* SECTIUNI FORMULAR */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .form-section-icon { font-size: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-label {
+      display: block; font-size: 0.8rem; color: var(--muted);
+      font-weight: 500; margin-bottom: 0.4rem;
+    }
+    .form-label .required { color: var(--accent2); margin-left: 2px; }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input.error { border-color: var(--accent2); }
+
+    .form-error { font-size: 0.75rem; color: var(--accent2); margin-top: 0.3rem; display: none; }
+    .form-error.visible { display: block; }
+
+    select.form-input { cursor: pointer; }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+
+    /* METODE PLATA */
+    .payment-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .payment-option {
+      background: var(--surface2); border: 2px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1rem;
+      cursor: pointer; text-align: center;
+      transition: all 0.2s; color: var(--muted); font-size: 0.85rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    }
+    .payment-option:hover { border-color: #444; color: var(--text); }
+    .payment-option.selected { border-color: var(--accent); color: var(--accent); background: rgba(232,255,0,0.05); }
+    .payment-icon { font-size: 1.4rem; }
+    .payment-label { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; }
+
+    /* card details (apar cand e selectat Card) */
+    .card-details { margin-top: 1rem; display: none; }
+    .card-details.visible { display: block; }
+
+    /* SUMAR LATERAL */
+    .checkout-summary {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem;
+      position: sticky; top: calc(var(--nav-h) + 5rem);
+    }
+
+    .summary-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+    /* items in sumar */
+    .summary-items { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .summary-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.82rem;
+    }
+    .summary-item-img {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.6rem;
+    }
+    .summary-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .summary-item-info { flex: 1; min-width: 0; }
+    .summary-item-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .summary-item-qty  { font-size: 0.72rem; color: var(--muted); }
+    .summary-item-price { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+    .summary-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+    .summary-line { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.6rem; }
+    .summary-line strong { color: var(--text); }
+
+    .summary-total { display: flex; justify-content: space-between; align-items: baseline; margin: 1rem 0 1.5rem; }
+    .total-label { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+    .total-price { font-family: 'Syne', sans-serif; font-size: 1.7rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+
+    .btn-place-order {
+      width: 100%; background: var(--accent); color: #000;
+      border: none; border-radius: var(--radius-sm);
+      padding: 1rem; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .btn-place-order:hover { background: #fff; transform: translateY(-1px); }
+
+    .order-note { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 0.75rem; line-height: 1.5; }
+    .order-note a { color: var(--accent); text-decoration: none; }
+
+    /* SUCCES MODAL */
+    .success-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 5000; display: none;
+      align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .success-overlay.open { display: flex; }
+
+    .success-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 3rem 2.5rem;
+      text-align: center; max-width: 480px; width: 100%;
+      animation: fadeUp 0.4s ease;
+    }
+
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .success-modal h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .success-modal p { color: var(--muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.9rem; }
+    .success-order-nr { font-family: 'Syne', sans-serif; font-size: 1.1rem; color: var(--accent); font-weight: 700; margin-bottom: 1.5rem; }
+    .success-modal a {
+      background: var(--accent); color: #000;
+      padding: 0.85rem 2rem; border-radius: 50px;
+      text-decoration: none; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.9rem;
+      display: inline-block; transition: all 0.2s;
+    }
+    .success-modal a:hover { background: #fff; }
+
+    /* TOAST */
+    .toast-stack { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2); border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem; font-size: 0.85rem; color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 3.7s forwards;
+      max-width: 300px;
+    }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; color: var(--muted); font-size: 0.78rem; }
+    footer a { color: var(--muted); text-decoration: none; }
+
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+    @media (max-width: 860px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .checkout-summary { position: static; }
+    }
+    @media (max-width: 520px) {
+      .form-row   { grid-template-columns: 1fr; }
+      .form-row-3 { grid-template-columns: 1fr; }
+      .payment-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <a href="cart.html" class="nav-back">← Înapoi la coș</a>
+  </nav>
+
+  <!-- PASI CHECKOUT -->
+  <div class="checkout-steps">
+    <div class="step done">
+      <div class="step-num">✓</div>
+      <span>Coș</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step active">
+      <div class="step-num">2</div>
+      <span>Date & Plată</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <span>Confirmare</span>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="checkout-layout">
+
+      <!-- COLOANA STANGA: formulare -->
+      <div>
+
+        <!-- DATE PERSONALE -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <span class="form-section-icon">👤</span> Date personale
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prenume <span class="required">*</span></label>
+              <input type="text" class="form-input" id="firstName" placeholder="Ion" />
+              <div class="form-error" id="err-firstName">Câmp obligatoriu</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nume <span class="required">*</span></label>
+              <input type="text" class="form-input" id="lastName" placeholder="Popescu" />
+              <div class="form-error" id="err-lastName">Câmp obligatoriu</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email <span class="required">*</span></label>
+              <input type="email" class="form-input" id="email" placeholder="ion@email.ro" />
+              <div class="form-error" id="err-email">Email invalid</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefon <span class="required">*</span></label>
+              <input type="tel" class="form-input" id="phone" placeholder="07xx xxx xxx" />
+              <div class="form-error" id="err-phone">Telefon invalid</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADRESA LIVRARE -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <span class="form-section-icon">📍</span> Adresă de livrare
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stradă și număr <span class="required">*</span></label>
+            <input type="text" class="form-input" id="street" placeholder="Str. Exemplu nr. 10, ap. 2" />
+            <div class="form-error" id="err-street">Câmp obligatoriu</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Oraș <span class="required">*</span></label>
+              <input type="text" class="form-input" id="city" placeholder="Timișoara" />
+              <div class="form-error" id="err-city">Câmp obligatoriu</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Județ <span class="required">*</span></label>
+              <select class="form-input" id="county">
+                <option value="">Selectează județul</option>
+                <option>Alba</option><option>Arad</option><option>Argeș</option>
+                <option>Bacău</option><option>Bihor</option><option>Bistrița-Năsăud</option>
+                <option>Botoșani</option><option>Brașov</option><option>Brăila</option>
+                <option>București</option><option>Buzău</option><option>Caraș-Severin</option>
+                <option>Călărași</option><option>Cluj</option><option>Constanța</option>
+                <option>Covasna</option><option>Dâmbovița</option><option>Dolj</option>
+                <option>Galați</option><option>Giurgiu</option><option>Gorj</option>
+                <option>Harghita</option><option>Hunedoara</option><option>Ialomița</option>
+                <option>Iași</option><option>Ilfov</option><option>Maramureș</option>
+                <option>Mehedinți</option><option>Mureș</option><option>Neamț</option>
+                <option>Olt</option><option>Prahova</option><option>Satu Mare</option>
+                <option>Sălaj</option><option>Sibiu</option><option>Suceava</option>
+                <option>Teleorman</option><option>Timiș</option><option>Tulcea</option>
+                <option>Vaslui</option><option>Vâlcea</option><option>Vrancea</option>
+              </select>
+              <div class="form-error" id="err-county">Selectează județul</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Cod poștal</label>
+              <input type="text" class="form-input" id="postal" placeholder="300001" maxlength="6" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mențiuni pentru curier (opțional)</label>
+            <textarea class="form-input" id="notes" placeholder="Ex: Interfon 42, sună înainte de livrare..."></textarea>
+          </div>
+        </div>
+
+        <!-- METODA DE PLATA -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <span class="form-section-icon">💳</span> Metodă de plată
+          </div>
+
+          <div class="payment-grid" id="paymentGrid">
+            <div class="payment-option selected" data-method="card" onclick="selectPayment(this)">
+              <span class="payment-icon">💳</span>
+              <span class="payment-label">Card bancar</span>
+            </div>
+            <div class="payment-option" data-method="paypal" onclick="selectPayment(this)">
+              <span class="payment-icon">🅿️</span>
+              <span class="payment-label">PayPal</span>
+            </div>
+            <div class="payment-option" data-method="apple" onclick="selectPayment(this)">
+              <span class="payment-icon"></span>
+              <span class="payment-label">Apple Pay</span>
+            </div>
+            <div class="payment-option" data-method="ramburs" onclick="selectPayment(this)">
+              <span class="payment-icon">📦</span>
+              <span class="payment-label">Ramburs</span>
+            </div>
+          </div>
+
+          <!-- detalii card (vizibile doar cand e selectat "card") -->
+          <div class="card-details visible" id="cardDetails">
+            <div class="form-group" style="margin-top:1rem">
+              <label class="form-label">Număr card <span class="required">*</span></label>
+              <input type="text" class="form-input" id="cardNumber"
+                     placeholder="1234 5678 9012 3456" maxlength="19"
+                     oninput="formatCard(this)" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Dată expirare <span class="required">*</span></label>
+                <input type="text" class="form-input" id="cardExpiry" placeholder="MM/AA" maxlength="5" oninput="formatExpiry(this)" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV <span class="required">*</span></label>
+                <input type="text" class="form-input" id="cardCvv" placeholder="123" maxlength="3" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nume titular</label>
+              <input type="text" class="form-input" id="cardName" placeholder="ION POPESCU" style="text-transform:uppercase" />
+            </div>
+            <!-- nota securitate -->
+            <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem;">
+              🔒 Plata este procesată securizat prin SSL. SeekParts nu stochează datele cardului.
+            </p>
+          </div>
+
+          <!-- nota ramburs -->
+          <div id="rambursNote" style="display:none;margin-top:1rem;padding:1rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;color:var(--muted);line-height:1.5;">
+            📦 Vei plăti la livrare, în numerar sau cu cardul, curierului Fan Courier / DPD.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLOANA DREAPTA: sumar -->
+      <div class="checkout-summary" id="checkoutSummary">
+        <!-- populat din JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 <strong>SeekParts SRL</strong> ·
+       <a href="legal/termeni.html">Termeni</a> ·
+       <a href="legal/confidentialitate.html">Confidențialitate</a>
+    </p>
+  </footer>
+
+  <!-- MODAL SUCCES -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-modal">
+      <span class="success-icon">🎉</span>
+      <h2>Comandă plasată!</h2>
+      <p>Mulțumim pentru comandă. Vei primi un email de confirmare în câteva minute.</p>
+      <div class="success-order-nr" id="successOrderNr">Comanda #SP00000</div>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">
+        Estimat livrare: <strong style="color:var(--text)">24–48 ore lucrătoare</strong>
+      </p>
+      <a href="index.html">← Înapoi la magazin</a>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script>
+    const SHIPPING_THRESHOLD = 200;
+    const SHIPPING_COST      = 15;
+    let selectedPayment      = 'card';
+
+    /* ---- COS ---- */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('seekparts_cart') || '[]'); }
+      catch { return []; }
+    }
+
+    /* ---- RENDER SUMAR ---- */
+    function renderSummary() {
+      const cart = getCart();
+      const el   = document.getElementById('checkoutSummary');
+
+      if (cart.length === 0) {
+        el.innerHTML = `
+          <div style="text-align:center;padding:2rem;color:var(--muted);">
+            <p>Coșul tău este gol.</p>
+            <a href="catalog.html" style="color:var(--accent);font-size:0.88rem;">← Mergi la catalog</a>
+          </div>
+        `;
+        return;
+      }
+
+      const subtotal = cart.reduce((s, i) => s + i.pret * i.qty, 0);
+      const shipping = subtotal >= SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+      const total    = subtotal + shipping;
+
+      const itemsHTML = cart.map(item => `
+        <div class="summary-item">
+          <div class="summary-item-img">
+            ${item.imagine
+              ? `<img src="${item.imagine}" alt="${item.nume}" />`
+              : '📦'
+            }
+          </div>
+          <div class="summary-item-info">
+            <div class="summary-item-name">${item.nume}</div>
+            <div class="summary-item-qty">×${item.qty}</div>
+          </div>
+          <div class="summary-item-price">${item.pret * item.qty} RON</div>
+        </div>
+      `).join('');
+
+      el.innerHTML = `
+        <div class="summary-title">Sumar comandă</div>
+        <div class="summary-items">${itemsHTML}</div>
+        <hr class="summary-divider" />
+        <div class="summary-line"><span>Subtotal</span><strong>${subtotal} RON</strong></div>
+        <div class="summary-line">
+          <span>Transport</span>
+          <strong style="${shipping === 0 ? 'color:#00c864' : ''}">${shipping === 0 ? 'Gratuit' : shipping + ' RON'}</strong>
+        </div>
+        <hr class="summary-divider" />
+        <div class="summary-total">
+          <span class="total-label">Total</span>
+          <span class="total-price">${total} RON</span>
+        </div>
+        <button class="btn-place-order" onclick="placeOrder()">
+          🚀 Plasează comanda
+        </button>
+        <p class="order-note">
+          Prin plasarea comenzii ești de acord cu
+          <a href="legal/termeni.html">Termenii și condițiile</a>.
+        </p>
+      `;
+    }
+
+    /* ---- SELECTARE METODA PLATA ---- */
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPayment = el.dataset.method;
+      document.getElementById('cardDetails').classList.toggle('visible', selectedPayment === 'card');
+      document.getElementById('rambursNote').style.display = selectedPayment === 'ramburs' ? 'block' : 'none';
+    }
+
+    /* ---- FORMATARE CARD ---- */
+    function formatCard(inp) {
+      let v = inp.value.replace(/\D/g, '').substring(0, 16);
+      inp.value = v.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function formatExpiry(inp) {
+      let v = inp.value.replace(/\D/g, '').substring(0, 4);
+      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+      inp.value = v;
+    }
+
+    /* ---- VALIDARE FORMULAR ---- */
+    function validateForm() {
+      const fields = [
+        { id: 'firstName', test: v => v.length >= 2 },
+        { id: 'lastName',  test: v => v.length >= 2 },
+        { id: 'email',     test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+        { id: 'phone',     test: v => /^0[0-9]{9}$/.test(v.replace(/\s/g,'')) },
+        { id: 'street',    test: v => v.length >= 5 },
+        { id: 'city',      test: v => v.length >= 2 },
+        { id: 'county',    test: v => v !== '' },
+      ];
+
+      let ok = true;
+      fields.forEach(({ id, test }) => {
+        const inp = document.getElementById(id);
+        const err = document.getElementById('err-' + id);
+        const valid = inp && test(inp.value.trim());
+        if (inp) inp.classList.toggle('error', !valid);
+        if (err) err.classList.toggle('visible', !valid);
+        if (!valid) ok = false;
+      });
+
+      if (selectedPayment === 'card') {
+        const cardNum = document.getElementById('cardNumber')?.value.replace(/\s/g,'');
+        if (!cardNum || cardNum.length < 16) {
+          showToast('⚠️ Verifică numărul cardului.');
+          ok = false;
+        }
+      }
+
+      return ok;
+    }
+
+    /* ---- PLASARE COMANDA ---- */
+    function placeOrder() {
+      if (!validateForm()) {
+        showToast('⚠️ Completează toate câmpurile obligatorii.');
+        return;
+      }
+
+      /* generam un numar de comanda random */
+      const orderNr = 'SP' + Math.random().toString(36).substring(2,8).toUpperCase();
+      document.getElementById('successOrderNr').textContent = `Comanda #${orderNr}`;
+
+      /* golim cosul dupa comanda */
+      localStorage.removeItem('seekparts_cart');
+
+      /* aratam modalul de succes */
+      document.getElementById('successOverlay').classList.add('open');
+
+      /* Joe: conecteaza aceasta functie la un backend real pentru:
+         - trimitere email confirmare
+         - salvare comanda in baza de date
+         - procesare plata prin un payment processor (Stripe, Netopia etc.)
+      */
+    }
+
+    /* ---- TOAST ---- */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 4200);
+    }
+
+    /* ---- INIT ---- */
+    document.addEventListener('DOMContentLoaded', () => {
+      const cart = getCart();
+      if (cart.length === 0) {
+        /* daca cosul e gol, redirect la catalog */
+        window.location.href = 'catalog.html';
+        return;
+      }
+      renderSummary();
+    });
+  </script>
+</body>
+</html>

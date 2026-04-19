@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+    SEO META TAGS
+    Schimbă description și keywords în funcție de produsele tale
+  ============================================================ -->
+  <meta name="description" content="Catalog piese auto SeekParts – filtrează după categorie, brand, preț și model mașină." />
+  <meta name="keywords" content="piese auto, catalog, filtre, bosch, brembo, frâne, motor, suspensie" />
+  <title>Catalog Piese Auto – SeekParts</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES (variabile de culori și dimensiuni)
+       Schimbă aici culorile dacă vrei alt tema
+    ============================================================ */
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #1a1a1a;
+      --surface3:  #222222;
+      --border:    #2a2a2a;
+      --accent:    #e8ff00;   /* galben-neon principal */
+      --accent2:   #ff4d00;   /* portocaliu pentru badge Promo */
+      --text:      #f0f0f0;
+      --muted:     #666666;
+      --radius:    14px;
+      --radius-sm: 8px;
+      --nav-h:     64px;
+      --sidebar-w: 280px;
+    }
+
+    /* ---- RESET ---- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       NAVBAR
+       Același navbar ca în index.html – copiază-l acolo dacă vrei
+       consistență. Linkurile duc la alte pagini din proiect.
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      text-decoration: none;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    /* ---- LINK-URI NAVIGARE ----
+       Schimbă href-urile dacă muți fișierele în alt folder
+    */
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active { color: var(--accent); }
+
+    .nav-actions { display: flex; gap: 1rem; align-items: center; }
+
+    .cart-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .cart-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .cart-count {
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- BUTON CONT UTILIZATOR ---- */
+    .account-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .account-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .account-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* hamburger mobil */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      width: 24px; height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* mobile nav drawer */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       LAYOUT PRINCIPAL: sidebar stânga + conținut dreapta
+    ============================================================ */
+    .page-wrapper {
+      display: flex;
+      margin-top: var(--nav-h);
+      min-height: calc(100vh - var(--nav-h));
+    }
+
+    /* ============================================================
+       SIDEBAR FILTRE (stânga)
+       Pe mobil devine un drawer care apare/dispare
+    ============================================================ */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+    }
+
+    /* scrollbar custom în sidebar */
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-section { margin-bottom: 2rem; }
+
+    .filter-section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+
+    /* checkbox-uri custom */
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.35rem 0;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--muted);
+      transition: color 0.2s;
+      user-select: none;
+    }
+    .filter-option:hover { color: var(--text); }
+    .filter-option input[type="checkbox"] { display: none; }
+    .filter-checkbox {
+      width: 16px; height: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      font-size: 0.65rem;
+    }
+    .filter-option.checked .filter-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+    .filter-option.checked { color: var(--text); }
+
+    .filter-count {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* range preț */
+    .price-inputs {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .price-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.75rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+    }
+    .price-input:focus { border-color: var(--accent); }
+    .price-separator { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    .reset-filters-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.6rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      margin-top: 1rem;
+    }
+    .reset-filters-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* buton mobil deschide filtre */
+    .filter-toggle-btn {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .filter-toggle-btn:hover { border-color: var(--accent); }
+
+    /* drawer mobil filtre */
+    .sidebar-mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1100;
+      backdrop-filter: blur(4px);
+    }
+    .sidebar-mobile-overlay.open { display: block; }
+
+    .sidebar-mobile {
+      position: fixed;
+      top: 0; left: -320px;
+      width: 300px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      z-index: 1101;
+      transition: left 0.35s cubic-bezier(0.32,0.72,0,1);
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .sidebar-mobile.open { left: 0; }
+    .sidebar-mobile-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      float: right;
+      margin-bottom: 1rem;
+    }
+
+    /* ============================================================
+       CONȚINUT PRINCIPAL (dreapta)
+    ============================================================ */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      min-width: 0; /* fix pentru flex overflow */
+    }
+
+    /* header pagină catalog */
+    .catalog-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    /* ---- LINK-URI BREADCRUMB ----
+       Schimbă href-ul dacă index.html e în alt folder
+    */
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--border); }
+
+    .catalog-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .catalog-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .catalog-title span { color: var(--accent); }
+
+    .results-count {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .results-count strong { color: var(--text); }
+
+    /* ---- BARA DE SEARCH + SORT ---- */
+    .search-sort-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      flex: 1;
+      position: relative;
+      min-width: 200px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+
+    /* buton clear search */
+    .search-clear {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      display: none;
+    }
+    .search-clear.visible { display: block; }
+
+    .sort-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      min-width: 160px;
+    }
+    .sort-select:focus { border-color: var(--accent); }
+
+    /* chips filtre active (tag-uri deasupra gridului) */
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .active-filter-chip {
+      background: rgba(232,255,0,0.08);
+      border: 1px solid rgba(232,255,0,0.3);
+      color: var(--accent);
+      border-radius: 50px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .active-filter-chip:hover { background: rgba(232,255,0,0.15); }
+    .active-filter-chip .chip-x { font-size: 0.65rem; opacity: 0.7; }
+
+    /* ============================================================
+       GRID PRODUSE
+    ============================================================ */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ============================================================
+       CARD PRODUS
+    ============================================================ */
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 0.4s ease both;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: #333;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+
+    /* ---- ZONA IMAGINE ----
+       Momentan afișează un placeholder vizual.
+       Joe: înlocuiește conținutul div-ului .product-img cu:
+         <img src="URL_IMAGINE" alt="Nume produs" />
+       SAU pune câmpul "imagine" în JSON și actualizează
+       funcția renderCard() din JavaScript (caută comentariul
+       "// IMAGE PLACEHOLDER" de mai jos).
+       Dimensiune recomandată: 400 × 280 px, format WebP sau JPG.
+    ---- */
+    .product-img {
+      width: 100%;
+      height: 170px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    /* placeholder vizual (elimină când adaugi imagini reale) */
+    .product-img-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 1rem;
+    }
+    .product-img-placeholder svg {
+      width: 40px; height: 40px;
+      opacity: 0.25;
+    }
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* badge (ex: Promo, Nou) */
+    .product-badge {
+      position: absolute;
+      top: 0.65rem; left: 0.65rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-promo { background: var(--accent2); color: #fff; }
+    .badge-nou   { background: var(--accent);  color: #000; }
+
+    .product-body { padding: 1.1rem; flex: 1; display: flex; flex-direction: column; }
+
+    .product-cat {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .product-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.4rem;
+      flex: 1;
+    }
+
+    .product-oem {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .product-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 0.9rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .product-price-suffix {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 400;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .add-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      width: 34px; height: 34px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .add-btn:hover { background: #fff; transform: scale(1.1); }
+    .add-btn:active { transform: scale(0.95); }
+
+    /* ============================================================
+       SKELETON LOADING (Boneyard-style)
+       Generat din același DOM ca product-card, animat cu shimmer.
+       Dispare automat după ce JSON-ul e încărcat.
+    ============================================================ */
+    @keyframes shimmer {
+      0%   { background-position: -700px 0; }
+      100% { background-position:  700px 0; }
+    }
+
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .skeleton-img {
+      width: 100%;
+      height: 170px;
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.4s infinite linear;
+    }
+
+    .skeleton-body { padding: 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .skeleton-line {
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.4s infinite linear;
+    }
+    .sk-cat  { height: 10px; width: 40%; }
+    .sk-name { height: 14px; width: 90%; }
+    .sk-name2{ height: 14px; width: 70%; }
+    .sk-oem  { height: 10px; width: 55%; }
+    .sk-desc { height: 10px; width: 100%; }
+    .sk-desc2{ height: 10px; width: 80%; }
+    .sk-foot { height: 34px; width: 100%; margin-top: 0.4rem; }
+
+    /* ---- EMPTY STATE ---- */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .empty-state-icon { font-size: 3.5rem; }
+    .empty-state h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .empty-state p { font-size: 0.9rem; max-width: 320px; line-height: 1.6; }
+    .empty-reset-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      padding: 0.6rem 1.6rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+    }
+    .empty-reset-btn:hover { background: #fff; }
+
+    /* ---- PAGINARE ---- */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .page-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ---- TOAST ---- */
+    .toast-stack {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      max-width: 300px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ---- ANIMAȚII ---- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toastOut {
+      to   { opacity: 0; transform: translateX(20px); }
+    }
+
+    /* ============================================================
+       FOOTER minimal (același ca index.html)
+    ============================================================ */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 4rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .sidebar { display: none; } /* ascundem sidebar-ul desktop */
+      .filter-toggle-btn { display: flex; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      .main-content { padding: 1.2rem; }
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+      .product-img { height: 130px; }
+      .catalog-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+    NAVBAR
+    LINK-URI DE ACTUALIZAT:
+      - href="index.html"        → homepage
+      - href="catalog.html"      → această pagină (activ)
+      - href="contact.html"      → pagina contact
+      - href="cart.html"         → pagina coș
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Acasă</a></li>
+      <li><a href="catalog.html" class="active">Catalog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <!-- BUTON CONT: duce la account.html (pagina de login/register)
+           Joe: schimbă href dacă pagina de cont are alt nume -->
+      <a href="account.html" class="account-btn" title="Contul meu">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        Cont
+      </a>
+      <!-- Coșul duce la cart.html; count-ul e actualizat din localStorage -->
+      <a href="cart.html" class="cart-btn">
+        🛒 Coș <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="Meniu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- drawer mobil nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html"   onclick="closeMobileNav()">Acasă</a>
+    <a href="catalog.html" onclick="closeMobileNav()">Catalog</a>
+    <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+    <a href="cart.html"    onclick="closeMobileNav()">Coș 🛒</a>
+  </div>
+
+  <!-- ============================================================
+    OVERLAY + DRAWER MOBIL FILTRE
+  ============================================================ -->
+  <div class="sidebar-mobile-overlay" id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+  <div class="sidebar-mobile" id="sidebarMobile">
+    <button class="sidebar-mobile-close" onclick="closeSidebarMobile()">✕</button>
+    <div id="sidebarMobileContent">
+      <!-- conținut injectat din JS (același ca sidebar desktop) -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+    LAYOUT PRINCIPAL
+  ============================================================ -->
+  <div class="page-wrapper">
+
+    <!-- SIDEBAR DESKTOP FILTRE -->
+    <aside class="sidebar" id="sidebarDesktop">
+      <div class="sidebar-title">Filtre</div>
+      <!-- conținut injectat din JS după ce JSON e încărcat -->
+      <div id="sidebarContent"></div>
+    </aside>
+
+    <!-- CONȚINUT PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- breadcrumb + titlu -->
+      <div class="catalog-header">
+        <div class="breadcrumb">
+          <!-- LINK: schimbă href dacă index.html e în alt loc -->
+          <a href="index.html">Acasă</a>
+          <span class="breadcrumb-sep">›</span>
+          <span>Catalog</span>
+          <!-- dacă vine din search, apare și query-ul -->
+          <span id="breadcrumbQuery"></span>
+        </div>
+        <div class="catalog-title-row">
+          <h1 class="catalog-title">Catalog <span>Piese</span></h1>
+          <span class="results-count" id="resultsCount"></span>
+        </div>
+      </div>
+
+      <!-- bara search + sort + buton filtre mobil -->
+      <div class="search-sort-bar">
+        <button class="filter-toggle-btn" onclick="openSidebarMobile()">
+          ⚙️ Filtre
+        </button>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Caută piesă, cod OEM, brand, model mașină..."
+            oninput="onSearch()"
+            autocomplete="off"
+          />
+          <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+        </div>
+        <select class="sort-select" id="sortSelect" onchange="applyFiltersAndRender()">
+          <option value="default">Sortare implicită</option>
+          <option value="pret-asc">Preț crescător</option>
+          <option value="pret-desc">Preț descrescător</option>
+          <option value="nume-asc">Nume A → Z</option>
+          <option value="brand-asc">Brand A → Z</option>
+        </select>
+      </div>
+
+      <!-- chips filtre active -->
+      <div class="active-filters" id="activeFilters"></div>
+
+      <!-- GRID PRODUSE (skeleton inițial, înlocuit după fetch) -->
+      <div class="products-grid" id="productsGrid">
+        <!-- skeletons generate din JS -->
+      </div>
+
+      <!-- paginare -->
+      <div class="pagination" id="pagination"></div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      © 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 ·
+      <a href="legal/termeni.html">Termeni</a> ·
+      <a href="legal/confidentialitate.html">Confidențialitate</a> ·
+      <a href="legal/retur.html">Retur</a>
+    </p>
+  </footer>
+
+  <!-- TOAST STACK -->
+  <div class="toast-stack" id="toastStack"></div>
+
+
+  <!-- ============================================================
+    JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+      CONFIGURARE GENERALĂ
+      Schimbă aceste valori dacă vrei alt comportament
+    ============================================================ */
+    const CONFIG = {
+      // ---- CALEA SPRE JSON ----
+      // Dacă muți produse.json în alt folder, actualizează aici.
+      // Momentan se așteaptă în același folder cu catalog.html.
+      JSON_PATH: './resources/produse.json',
+
+      // câte produse pe pagină
+      PER_PAGE: 24,
+
+      // câte skeleton cards să afișeze la loading
+      SKELETON_COUNT: 12,
+
+      // preț maxim implicit pentru slider (actualizat din JSON)
+      DEFAULT_MAX_PRICE: 3000,
+    };
+
+    /* ============================================================
+      STATE GLOBAL
+      Tot ce ține de filtre, date, paginare e centralizat aici.
+    ============================================================ */
+    let STATE = {
+      allProducts: [],      // toate produsele aplatizate din JSON
+      filtered: [],         // produse după filtre + search
+      currentPage: 1,
+
+      search: '',
+
+      // filtre active (seturi de valori selectate)
+      activeCategories: new Set(),
+      activeBrands:     new Set(),
+
+      // preț
+      priceMin: 0,
+      priceMax: CONFIG.DEFAULT_MAX_PRICE,
+      priceAbsMax: CONFIG.DEFAULT_MAX_PRICE,
+
+      // sortare
+      sort: 'default',
+
+      // date pentru construirea filtrelor
+      allCategories: [],
+      allBrands: [],
+    };
+
+    /* ============================================================
+      COȘ (localStorage)
+      Folosit de toate paginile site-ului pentru a persista coșul.
+      ---- IMPORTANT ----
+      cart.html, checkout.html și index.html citesc tot din
+      localStorage cu cheia 'seekparts_cart'.
+    ============================================================ */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('seekparts_cart') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('seekparts_cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    function addToCart(product) {
+      const cart = getCart();
+      const existing = cart.find(i => i.cod_oem === product.cod_oem);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      saveCart(cart);
+      showToast(`✓ <strong>${product.nume.substring(0, 40)}...</strong> adăugat în coș`);
+    }
+
+    function updateCartBadge() {
+      const total = getCart().reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+    }
+
+    /* ============================================================
+      FETCH JSON
+      Încarcă produse.json de pe același server.
+      ---- CE FACE ----
+      1. Arată skeleton loading
+      2. Face fetch('./produse.json')
+      3. Aplatizează array-ul [ {categorie, produse:[]} ] în
+         lista plată cu câmpul `categorie` pe fiecare produs
+      4. Construiește filtrele
+      5. Randează produsele
+    ============================================================ */
+    async function loadProducts() {
+      showSkeletons();
+
+      let raw = [];
+      try {
+        const res = await fetch(CONFIG.JSON_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        raw = await res.json();
+      } catch (err) {
+        // ---- EROARE FETCH ----
+        // Dacă apare eroarea asta, verifică:
+        // 1. produse.json există în același folder cu catalog.html
+        // 2. rulezi pe un server (nu file://) – folosește Live Server în VS Code
+        document.getElementById('productsGrid').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>Nu s-au putut încărca produsele</h3>
+            <p>Verifică că <code>produse.json</code> există în același folder și că rulezi pe un server local sau web.</p>
+            <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">${err.message}</p>
+          </div>
+        `;
+        return;
+      }
+
+      /* ---- APLATIZARE JSON ----
+         JSON-ul are structura: [ { categorie: "Motor", produse: [...] }, ... ]
+         Transformăm în: [ { ...produs, categorie: "Motor" }, ... ]
+         Dacă schimbi structura JSON-ului, actualizează aici.
+      */
+      STATE.allProducts = raw.flatMap(group =>
+        (group.produse || []).map(p => ({
+          ...p,
+          categorie: group.categorie || 'Altele',
+
+          /* ---- IMAGE PLACEHOLDER ----
+             Momentan câmpul `imagine` nu există în JSON.
+             Joe: adaugă în JSON câmpul:
+               "imagine": "https://domeniultau.ro/img/cod_oem.jpg"
+             și decomentează linia de mai jos:
+               imagine: p.imagine || '',
+             Dimensiune recomandată: 400×280px, WebP sau JPG.
+          */
+          imagine: p.imagine || '',  // gol = placeholder vizual
+        }))
+      );
+
+      buildFilterData();
+      applyFiltersAndRender();
+    }
+
+    /* ============================================================
+      CONSTRUIRE DATE FILTRE
+      Extrage categorii unice și branduri unice din produse.
+    ============================================================ */
+    function buildFilterData() {
+      const cats   = [...new Set(STATE.allProducts.map(p => p.categorie))].sort();
+      const brands = [...new Set(STATE.allProducts.map(p => p.brand))].filter(Boolean).sort();
+      const prices = STATE.allProducts.map(p => p.pret).filter(Number.isFinite);
+      const maxP   = prices.length ? Math.max(...prices) : CONFIG.DEFAULT_MAX_PRICE;
+
+      STATE.allCategories = cats;
+      STATE.allBrands     = brands;
+      STATE.priceAbsMax   = maxP;
+      STATE.priceMax      = maxP;
+
+      buildSidebarHTML();
+    }
+
+    /* ============================================================
+      CONSTRUIRE HTML SIDEBAR FILTRE
+      !! NU mai apelam buildSidebarHTML() la fiecare toggle !!
+      O apelam O SINGURA DATA dupa loadProducts().
+      State-ul e gestionat prin STATE.activeCategories / STATE.activeBrands
+      si vizual prin clase CSS aplicate direct pe elementele existente.
+    ============================================================ */
+    function buildSidebarHTML() {
+      const countByCat = {};
+      STATE.allCategories.forEach(c => {
+        countByCat[c] = STATE.allProducts.filter(p => p.categorie === c).length;
+      });
+      const countByBrand = {};
+      STATE.allBrands.forEach(b => {
+        countByBrand[b] = STATE.allProducts.filter(p => p.brand === b).length;
+      });
+
+      const html = `
+        <!-- FILTRE CATEGORII -->
+        <div class="filter-section">
+          <div class="filter-section-label">Categorie</div>
+          ${STATE.allCategories.map(cat => `
+            <label class="filter-option" data-type="cat" data-value="${cat}">
+              <span class="filter-checkbox"></span>
+              <span class="filter-label">${cat}</span>
+              <span class="filter-count">${countByCat[cat] || 0}</span>
+            </label>
+          `).join('')}
+        </div>
+
+        <!-- FILTRE BRAND -->
+        <div class="filter-section">
+          <div class="filter-section-label">Brand</div>
+          ${STATE.allBrands.map(brand => `
+            <label class="filter-option" data-type="brand" data-value="${brand}">
+              <span class="filter-checkbox"></span>
+              <span class="filter-label">${brand}</span>
+              <span class="filter-count">${countByBrand[brand] || 0}</span>
+            </label>
+          `).join('')}
+        </div>
+
+        <!-- FILTRU PRET -->
+        <div class="filter-section">
+          <div class="filter-section-label">Preț (RON)</div>
+          <div class="price-inputs">
+            <input type="number" class="price-input" id="priceMinInp"
+                   value="${STATE.priceMin}" min="0" max="${STATE.priceAbsMax}"
+                   oninput="onPriceInput()" placeholder="Min" />
+            <span class="price-separator">–</span>
+            <input type="number" class="price-input" id="priceMaxInp"
+                   value="${STATE.priceMax}" min="0" max="${STATE.priceAbsMax}"
+                   oninput="onPriceInput()" placeholder="Max" />
+          </div>
+          <!-- SLIDER PRET cu valoare afisata live -->
+          <div style="position:relative; margin-top:0.5rem;">
+            <input type="range" id="priceRange"
+                   min="0" max="${STATE.priceAbsMax}"
+                   value="${STATE.priceMax}"
+                   oninput="onRangeInput(this.value)" />
+            <!-- label live care arata valoarea curenta a slider-ului -->
+            <div id="priceRangeLabel" style="
+              display:flex; justify-content:space-between;
+              margin-top:0.4rem; font-size:0.75rem; color:var(--muted);
+            ">
+              <span>0 RON</span>
+              <span id="priceRangeValue" style="color:var(--accent); font-weight:600;">${STATE.priceMax} RON</span>
+              <span>${STATE.priceAbsMax} RON</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="reset-filters-btn" onclick="resetFilters()">✕ Resetează filtrele</button>
+      `;
+
+      document.getElementById('sidebarContent').innerHTML = html;
+      document.getElementById('sidebarMobileContent').innerHTML = html;
+
+      // ---- atasam event listeners pe toate .filter-option ----
+      // Folosim event delegation in loc de onclick inline
+      // ca sa nu distrugem state-ul la rebuild
+      document.querySelectorAll('.filter-option[data-type]').forEach(el => {
+        el.addEventListener('click', onFilterOptionClick);
+      });
+
+      // aplicam vizual state-ul curent (daca resetam sau venim din URL)
+      syncFilterVisuals();
+    }
+
+    /* ---- SYNC VIZUAL ----
+       Aplica clasa .checked pe toate optiunile care sunt active in STATE.
+       Apelat dupa buildSidebarHTML si dupa resetFilters.
+    */
+    function syncFilterVisuals() {
+      document.querySelectorAll('.filter-option[data-type="cat"]').forEach(el => {
+        const val = el.dataset.value;
+        const isActive = STATE.activeCategories.has(val);
+        el.classList.toggle('checked', isActive);
+        el.querySelector('.filter-checkbox').textContent = isActive ? '✓' : '';
+      });
+      document.querySelectorAll('.filter-option[data-type="brand"]').forEach(el => {
+        const val = el.dataset.value;
+        const isActive = STATE.activeBrands.has(val);
+        el.classList.toggle('checked', isActive);
+        el.querySelector('.filter-checkbox').textContent = isActive ? '✓' : '';
+      });
+    }
+
+    /* ---- HANDLER CLICK FILTRU ----
+       Schimba state-ul si actualizeaza DOAR elementul clicat, fara rebuild.
+    */
+    function onFilterOptionClick(e) {
+      const el = e.currentTarget;
+      const type = el.dataset.type;
+      const val  = el.dataset.value;
+      const checkbox = el.querySelector('.filter-checkbox');
+
+      if (type === 'cat') {
+        if (STATE.activeCategories.has(val)) {
+          STATE.activeCategories.delete(val);
+          el.classList.remove('checked');
+          checkbox.textContent = '';
+        } else {
+          STATE.activeCategories.add(val);
+          el.classList.add('checked');
+          checkbox.textContent = '✓';
+        }
+      } else if (type === 'brand') {
+        if (STATE.activeBrands.has(val)) {
+          STATE.activeBrands.delete(val);
+          el.classList.remove('checked');
+          checkbox.textContent = '';
+        } else {
+          STATE.activeBrands.add(val);
+          el.classList.add('checked');
+          checkbox.textContent = '✓';
+        }
+      }
+
+      STATE.currentPage = 1;
+      applyFiltersAndRender();
+    }
+
+    /* ============================================================
+      FUNCTII FILTRE PRET
+    ============================================================ */
+    function onPriceInput() {
+      const minEl = document.getElementById('priceMinInp');
+      const maxEl = document.getElementById('priceMaxInp');
+      if (!minEl || !maxEl) return;
+      STATE.priceMin = parseInt(minEl.value) || 0;
+      STATE.priceMax = parseInt(maxEl.value) || STATE.priceAbsMax;
+      // sync slider
+      const rangeEl = document.getElementById('priceRange');
+      if (rangeEl) rangeEl.value = STATE.priceMax;
+      updatePriceLabel(STATE.priceMax);
+      STATE.currentPage = 1;
+      applyFiltersAndRender();
+    }
+
+    function onRangeInput(val) {
+      STATE.priceMax = parseInt(val);
+      // sync input numeric
+      const maxEl = document.getElementById('priceMaxInp');
+      if (maxEl) maxEl.value = STATE.priceMax;
+      updatePriceLabel(STATE.priceMax);
+      STATE.currentPage = 1;
+      applyFiltersAndRender();
+    }
+
+    /* ---- afiseaza valoarea curenta a slider-ului ---- */
+    function updatePriceLabel(val) {
+      const labelEl = document.getElementById('priceRangeValue');
+      if (labelEl) labelEl.textContent = `${val} RON`;
+    }
+
+    function resetFilters() {
+      STATE.activeCategories.clear();
+      STATE.activeBrands.clear();
+      STATE.priceMin = 0;
+      STATE.priceMax = STATE.priceAbsMax;
+      STATE.search = '';
+      STATE.currentPage = 1;
+      STATE.sort = 'default';
+
+      const searchEl = document.getElementById('searchInput');
+      const sortEl   = document.getElementById('sortSelect');
+      const clearEl  = document.getElementById('searchClear');
+      const rangeEl  = document.getElementById('priceRange');
+      const minEl    = document.getElementById('priceMinInp');
+      const maxEl    = document.getElementById('priceMaxInp');
+
+      if (searchEl) searchEl.value = '';
+      if (sortEl)   sortEl.value = 'default';
+      if (clearEl)  clearEl.classList.remove('visible');
+      if (rangeEl)  rangeEl.value = STATE.priceAbsMax;
+      if (minEl)    minEl.value = 0;
+      if (maxEl)    maxEl.value = STATE.priceAbsMax;
+
+      updatePriceLabel(STATE.priceAbsMax);
+      syncFilterVisuals();
+      applyFiltersAndRender();
+    }
+
+    /* ============================================================
+      SEARCH
+      Citim query-ul din URL (?q=...) la încărcare și din input.
+    ============================================================ */
+    function onSearch() {
+      const val = document.getElementById('searchInput').value;
+      STATE.search = val.toLowerCase().trim();
+      STATE.currentPage = 1;
+      document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
+      applyFiltersAndRender();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      STATE.search = '';
+      document.getElementById('searchClear').classList.remove('visible');
+      applyFiltersAndRender();
+    }
+
+    /* ---- citire query din URL (?q=filtru+ulei) ----
+       Când dai search din index.html, te duce la catalog.html?q=...
+       și automat se populează search-ul și se filtrează.
+    */
+    function readQueryFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q') || '';
+      const cat = params.get('cat') || '';
+
+      if (q) {
+        STATE.search = q.toLowerCase().trim();
+        document.getElementById('searchInput').value = q;
+        document.getElementById('searchClear').classList.add('visible');
+        // breadcrumb
+        document.getElementById('breadcrumbQuery').innerHTML =
+          `<span class="breadcrumb-sep">›</span><span>Rezultate pentru "${q}"</span>`;
+      }
+
+      if (cat) {
+        STATE.activeCategories.add(cat);
+      }
+    }
+
+    /* ============================================================
+      APLICARE FILTRE + SORTARE + RANDARE
+      Funcția centrală – chemată la orice schimbare de filtru.
+      Nu are limită de produse – randează tot ce trece filtrele.
+    ============================================================ */
+    function applyFiltersAndRender() {
+      STATE.sort = document.getElementById('sortSelect')?.value || 'default';
+
+      // 1. filtrare
+      let results = STATE.allProducts.filter(p => {
+
+        // ---- FILTRU CATEGORIE ----
+        if (STATE.activeCategories.size > 0 && !STATE.activeCategories.has(p.categorie))
+          return false;
+
+        // ---- FILTRU BRAND ----
+        if (STATE.activeBrands.size > 0 && !STATE.activeBrands.has(p.brand))
+          return false;
+
+        // ---- FILTRU PREȚ ----
+        if (p.pret < STATE.priceMin || p.pret > STATE.priceMax)
+          return false;
+
+        // ---- FILTRU SEARCH ----
+        // Caută în: nume, brand, cod_oem, descriere, categorie
+        if (STATE.search) {
+          const hay = [p.nume, p.brand, p.cod_oem, p.descriere, p.categorie]
+            .join(' ').toLowerCase();
+          if (!hay.includes(STATE.search)) return false;
+        }
+
+        return true;
+      });
+
+      // 2. sortare
+      results = sortProducts(results, STATE.sort);
+
+      STATE.filtered = results;
+
+      // 3. actualizare UI
+      renderActiveFilterChips();
+      renderResultsCount();
+      renderPage();
+      renderPagination();
+    }
+
+    function sortProducts(list, sort) {
+      const copy = [...list];
+      switch (sort) {
+        case 'pret-asc':   return copy.sort((a, b) => a.pret - b.pret);
+        case 'pret-desc':  return copy.sort((a, b) => b.pret - a.pret);
+        case 'nume-asc':   return copy.sort((a, b) => a.nume.localeCompare(b.nume, 'ro'));
+        case 'brand-asc':  return copy.sort((a, b) => (a.brand||'').localeCompare(b.brand||'', 'ro'));
+        default:           return copy;
+      }
+    }
+
+    /* ============================================================
+      RANDARE CHIPS FILTRE ACTIVE (deasupra gridului)
+    ============================================================ */
+    function renderActiveFilterChips() {
+      const chips = [];
+
+      STATE.activeCategories.forEach(cat => {
+        chips.push(`
+          <span class="active-filter-chip" onclick="removeCategory('${cat}')">
+            ${cat} <span class="chip-x">✕</span>
+          </span>
+        `);
+      });
+
+      STATE.activeBrands.forEach(brand => {
+        chips.push(`
+          <span class="active-filter-chip" onclick="removeBrand('${brand}')">
+            ${brand} <span class="chip-x">✕</span>
+          </span>
+        `);
+      });
+
+      if (STATE.priceMin > 0 || STATE.priceMax < STATE.priceAbsMax) {
+        chips.push(`
+          <span class="active-filter-chip" onclick="resetPrice()">
+            ${STATE.priceMin}–${STATE.priceMax} RON <span class="chip-x">✕</span>
+          </span>
+        `);
+      }
+
+      document.getElementById('activeFilters').innerHTML = chips.join('');
+    }
+
+    function removeCategory(cat) {
+      STATE.activeCategories.delete(cat);
+      STATE.currentPage = 1;
+      syncFilterVisuals();
+      applyFiltersAndRender();
+    }
+
+    function removeBrand(brand) {
+      STATE.activeBrands.delete(brand);
+      STATE.currentPage = 1;
+      syncFilterVisuals();
+      applyFiltersAndRender();
+    }
+
+    function resetPrice() {
+      STATE.priceMin = 0;
+      STATE.priceMax = STATE.priceAbsMax;
+      STATE.currentPage = 1;
+      const rangeEl = document.getElementById('priceRange');
+      const minEl   = document.getElementById('priceMinInp');
+      const maxEl   = document.getElementById('priceMaxInp');
+      if (rangeEl) rangeEl.value = STATE.priceAbsMax;
+      if (minEl)   minEl.value = 0;
+      if (maxEl)   maxEl.value = STATE.priceAbsMax;
+      updatePriceLabel(STATE.priceAbsMax);
+      applyFiltersAndRender();
+    }
+
+    /* ============================================================
+      RANDARE NUMĂR REZULTATE
+    ============================================================ */
+    function renderResultsCount() {
+      const el = document.getElementById('resultsCount');
+      const total = STATE.filtered.length;
+      el.innerHTML = total > 0
+        ? `<strong>${total}</strong> produs${total !== 1 ? 'e' : ''} găsit${total !== 1 ? 'e' : ''}`
+        : '';
+    }
+
+    /* ============================================================
+      RANDARE PAGINA CURENTĂ DE PRODUSE
+    ============================================================ */
+    function renderPage() {
+      const grid = document.getElementById('productsGrid');
+      const start = (STATE.currentPage - 1) * CONFIG.PER_PAGE;
+      const pageItems = STATE.filtered.slice(start, start + CONFIG.PER_PAGE);
+
+      if (pageItems.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <h3>Niciun produs găsit</h3>
+            <p>Încearcă să modifici filtrele sau să folosești termeni diferiți.</p>
+            <button class="empty-reset-btn" onclick="resetFilters()">Resetează filtrele</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = pageItems.map((p, i) => renderCard(p, i)).join('');
+    }
+
+    /* ============================================================
+      RANDARE CARD PRODUS
+      Fiecare card are un data-attribute cu cod_oem pentru a putea
+      naviga la pagina de detaliu: product-detail.html?cod=...
+
+      ---- IMAGE PLACEHOLDER ----
+      Dacă p.imagine e gol → afișăm placeholder SVG gri.
+      Dacă p.imagine are URL → afișăm <img>.
+      Joe: adaugă câmpul "imagine" în JSON pentru fiecare produs.
+    ============================================================ */
+    function renderCard(p, index) {
+      const delay = Math.min(index * 40, 400); // stagger animație
+
+      /* ---- IMAGINE ----
+         Schimbă src cu câmpul din JSON după ce Joe adaugă imaginile.
+         Dacă p.imagine există → <img src="${p.imagine}" alt="${p.nume}" />
+         Dacă nu → placeholder vizual de mai jos.
+      */
+      const imgHTML = p.imagine
+        ? `<img src="${p.imagine}" alt="${p.nume}" loading="lazy" />`
+        : `
+          <div class="product-img-placeholder">
+            <!-- PLACEHOLDER IMAGINE
+                 Joe: înlocuiește tot acest div cu:
+                 <img src="URL_IMAGINE" alt="${p.nume}" />
+                 Dimensiune recomandată: 400×280px
+            -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <span>Fără imagine<br/><small>${p.cod_oem}</small></span>
+          </div>
+        `;
+
+      return `
+        <div class="product-card"
+             style="animation-delay: ${delay}ms"
+             onclick="goToDetail('${p.cod_oem}')">
+          <div class="product-img">
+            ${imgHTML}
+          </div>
+          <div class="product-body">
+            <div class="product-cat">${p.categorie}</div>
+            <div class="product-name">${p.nume}</div>
+            <div class="product-oem">COD OEM: ${p.cod_oem}</div>
+            <div class="product-desc">${p.descriere || ''}</div>
+            <div class="product-footer">
+              <div class="product-price">
+                ${p.pret} <span class="product-price-suffix">RON</span>
+              </div>
+              <!-- stopPropagation ca să nu navigheze la detaliu când dai Add -->
+              <button class="add-btn"
+                      onclick="event.stopPropagation(); handleAddToCart(event, '${p.cod_oem}')"
+                      title="Adaugă în coș">
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ---- click pe card → pagina de detaliu ----
+       LINK: product-detail.html?cod=COD_OEM
+       Joe: asigură-te că product-detail.html citește parametrul
+       `cod` din URL și încarcă produsul din JSON.
+    */
+    function goToDetail(codOem) {
+      window.location.href = `product-detail.html?cod=${encodeURIComponent(codOem)}`;
+    }
+
+    function handleAddToCart(e, codOem) {
+      const product = STATE.allProducts.find(p => p.cod_oem === codOem);
+      if (product) addToCart(product);
+    }
+
+    /* ============================================================
+      SKELETON LOADING
+      Generăm N card-uri false cu shimmer înainte de fetch.
+    ============================================================ */
+    function showSkeletons() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = Array.from({ length: CONFIG.SKELETON_COUNT }, () => `
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line sk-cat"></div>
+            <div class="skeleton-line sk-name"></div>
+            <div class="skeleton-line sk-name2"></div>
+            <div class="skeleton-line sk-oem"></div>
+            <div class="skeleton-line sk-desc"></div>
+            <div class="skeleton-line sk-desc2"></div>
+            <div class="skeleton-line sk-foot"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ============================================================
+      PAGINARE
+      Fără limită de produse – arată toate dacă sunt multe pagini.
+    ============================================================ */
+    function renderPagination() {
+      const totalPages = Math.ceil(STATE.filtered.length / CONFIG.PER_PAGE);
+      const el = document.getElementById('pagination');
+
+      if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+      let html = `
+        <button class="page-btn" onclick="goToPage(${STATE.currentPage - 1})"
+                ${STATE.currentPage === 1 ? 'disabled' : ''}>‹</button>
+      `;
+
+      // afișăm max 7 butoane + ellipsis
+      const range = buildPageRange(STATE.currentPage, totalPages);
+      range.forEach(p => {
+        if (p === '...') {
+          html += `<span style="color:var(--muted);padding:0 0.25rem">…</span>`;
+        } else {
+          html += `<button class="page-btn ${p === STATE.currentPage ? 'active' : ''}"
+                           onclick="goToPage(${p})">${p}</button>`;
+        }
+      });
+
+      html += `
+        <button class="page-btn" onclick="goToPage(${STATE.currentPage + 1})"
+                ${STATE.currentPage === totalPages ? 'disabled' : ''}>›</button>
+      `;
+
+      el.innerHTML = html;
+    }
+
+    function buildPageRange(current, total) {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const r = new Set([1, total, current]);
+      [-1, 0, 1].forEach(d => { const p = current + d; if (p > 0 && p <= total) r.add(p); });
+      const sorted = [...r].sort((a, b) => a - b);
+      const result = [];
+      sorted.forEach((p, i) => {
+        if (i > 0 && p - sorted[i - 1] > 1) result.push('...');
+        result.push(p);
+      });
+      return result;
+    }
+
+    function goToPage(page) {
+      const totalPages = Math.ceil(STATE.filtered.length / CONFIG.PER_PAGE);
+      if (page < 1 || page > totalPages) return;
+      STATE.currentPage = page;
+      renderPage();
+      renderPagination();
+      // scroll sus la grid
+      document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ============================================================
+      TOAST NOTIFICĂRI
+    ============================================================ */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* ============================================================
+      MOBILE NAV
+    ============================================================ */
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+    }
+
+    /* ============================================================
+      SIDEBAR MOBIL FILTRE
+    ============================================================ */
+    function openSidebarMobile() {
+      document.getElementById('sidebarMobile').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('open');
+    }
+    function closeSidebarMobile() {
+      document.getElementById('sidebarMobile').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('open');
+    }
+
+    /* ============================================================
+      INIT
+      Ordinea de execuție la încărcarea paginii.
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartBadge();
+      readQueryFromURL();   // citește ?q= și ?cat= din URL
+      loadProducts();       // fetch JSON → build filtre → render
+    });
+  </script>
+
+</body>
+</html>

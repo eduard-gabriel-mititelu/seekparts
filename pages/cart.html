@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Coșul tău de cumpărături – SeekParts" />
+  <title>Coș de cumpărături – SeekParts</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #1a1a1a;
+      --surface3:  #222222;
+      --border:    #2a2a2a;
+      --accent:    #e8ff00;
+      --accent2:   #ff4d00;
+      --text:      #f0f0f0;
+      --muted:     #666666;
+      --radius:    14px;
+      --radius-sm: 8px;
+      --nav-h:     64px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ============================================================
+       NAVBAR – identic cu celelalte pagini
+       LINK-URI: index.html, catalog.html, account.html
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text); letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .nav-icon-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .nav-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-icon-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .cart-count {
+      background: var(--accent); color: #000;
+      border-radius: 50%; width: 18px; height: 18px;
+      font-size: 0.68rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; }
+
+    .mobile-nav {
+      display: none; position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      z-index: 999; padding: 1.5rem 2rem;
+      flex-direction: column; gap: 0.75rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { color: var(--text); text-decoration: none; font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+    /* ============================================================
+       LAYOUT PAGINA
+    ============================================================ */
+    .page-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 2.5rem) 2rem 4rem;
+    }
+
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: var(--muted); margin-bottom: 2rem;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--border); }
+
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.4rem;
+    }
+    .page-title span { color: var(--accent); }
+
+    .cart-subtitle {
+      color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem;
+    }
+
+    /* ============================================================
+       LAYOUT: lista produse + sumar
+    ============================================================ */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* ============================================================
+       LISTA PRODUSE DIN COS
+    ============================================================ */
+    .cart-items-list { display: flex; flex-direction: column; gap: 1rem; }
+
+    .cart-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      transition: border-color 0.2s;
+      animation: fadeUp 0.3s ease both;
+    }
+    .cart-item:hover { border-color: #333; }
+
+    /* ---- IMAGINE PRODUS IN COS ----
+       Joe: daca produsul are campul "imagine" in JSON,
+       se va afisa automat. Altfel → placeholder gri.
+       Dimensiune recomandata: 90x90px
+    ---- */
+    .cart-item-img {
+      width: 90px; height: 90px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .cart-item-img-placeholder {
+      display: flex; flex-direction: column; align-items: center;
+      color: var(--muted); font-size: 0.62rem; text-align: center;
+    }
+    .cart-item-img-placeholder svg { width: 28px; height: 28px; opacity: 0.2; }
+
+    .cart-item-info { min-width: 0; }
+
+    .cart-item-cat {
+      font-size: 0.68rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 600; margin-bottom: 0.3rem;
+    }
+
+    .cart-item-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.92rem; font-weight: 700;
+      line-height: 1.3; margin-bottom: 0.3rem;
+      /* trunchiere la 2 randuri */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cart-item-oem { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.75rem; }
+
+    .cart-item-controls {
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    }
+
+    .qty-control {
+      display: flex; align-items: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: none; border: none;
+      color: var(--text); width: 32px; height: 32px;
+      cursor: pointer; font-size: 1rem;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--surface3); }
+
+    .qty-num {
+      width: 36px; text-align: center;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      line-height: 32px;
+    }
+
+    .remove-btn {
+      background: none; border: none;
+      color: var(--muted); font-size: 0.82rem;
+      cursor: pointer; transition: color 0.2s;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .remove-btn:hover { color: var(--accent2); }
+
+    /* pretul pe linie */
+    .cart-item-price-col {
+      text-align: right;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;
+    }
+
+    .cart-item-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 800; color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .cart-item-unit-price {
+      font-size: 0.75rem; color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       SUMAR COMANDA (coloana dreapta)
+    ============================================================ */
+    .cart-summary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: sticky;
+      top: calc(var(--nav-h) + 1rem);
+    }
+
+    .summary-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-line {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .summary-line strong { color: var(--text); }
+
+    .summary-shipping {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .shipping-free { color: #00c864; font-weight: 600; }
+    .shipping-cost { color: var(--muted); }
+
+    .summary-total {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 1.5rem;
+    }
+    .total-label { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+    .total-price { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+
+    /* metode de plata */
+    .payment-methods {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .pay-badge {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 5px; padding: 0.25rem 0.6rem;
+      font-size: 0.72rem; color: var(--muted);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background: var(--accent); color: #000;
+      border: none; border-radius: var(--radius-sm);
+      padding: 1rem; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .btn-checkout:hover { background: #fff; transform: translateY(-1px); }
+    .btn-checkout:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    .btn-continue {
+      width: 100%;
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem; font-family: 'Syne', sans-serif;
+      font-weight: 600; font-size: 0.88rem;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none;
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+    .btn-continue:hover { border-color: var(--accent); color: var(--accent); }
+
+    .summary-note {
+      font-size: 0.75rem; color: var(--muted);
+      text-align: center; margin-top: 1rem; line-height: 1.5;
+    }
+    .summary-note a { color: var(--accent); text-decoration: none; }
+
+    /* ============================================================
+       COS GOL
+    ============================================================ */
+    .empty-cart {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 6rem 2rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    }
+    .empty-icon { font-size: 5rem; }
+    .empty-cart h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+    .empty-cart p { color: var(--muted); max-width: 340px; line-height: 1.6; }
+    .btn-go-catalog {
+      background: var(--accent); color: #000;
+      padding: 0.85rem 2rem; border-radius: 50px;
+      text-decoration: none; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .btn-go-catalog:hover { background: #fff; transform: translateY(-2px); }
+
+    /* ============================================================
+       PRODUSE RECOMANDATE (sub cos)
+    ============================================================ */
+    .recommended-section { margin-top: 4rem; }
+
+    .rec-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+      margin-bottom: 1.5rem; letter-spacing: -0.5px;
+    }
+    .rec-title span { color: var(--accent); }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    /* card recomandat – versiune mica */
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .rec-card:hover { transform: translateY(-3px); border-color: #333; }
+
+    .rec-img {
+      width: 100%; height: 120px;
+      background: var(--surface2); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.7rem; overflow: hidden;
+    }
+    .rec-img img { width: 100%; height: 100%; object-fit: cover; }
+    .rec-body { padding: 0.9rem; }
+    .rec-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .rec-price { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 800; color: var(--accent); }
+
+    /* ---- SKELETON ---- */
+    @keyframes shimmer { 0% { background-position: -700px 0; } 100% { background-position: 700px 0; } }
+    .sk {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 4px;
+    }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-stack { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem; font-size: 0.85rem; color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      max-width: 300px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 2rem; text-align: center; color: var(--muted); font-size: 0.8rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ---- ANIMATII ---- */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .cart-summary { position: static; }
+    }
+    @media (max-width: 600px) {
+      .cart-item { grid-template-columns: 70px 1fr; }
+      .cart-item-price-col { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+    NAVBAR
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Acasă</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="account.html" class="nav-icon-btn" title="Contul meu">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Cont
+      </a>
+      <a href="cart.html" class="nav-icon-btn">
+        🛒 Coș <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="Meniu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html"   onclick="closeMobileNav()">Acasă</a>
+    <a href="catalog.html" onclick="closeMobileNav()">Catalog</a>
+    <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+    <a href="account.html" onclick="closeMobileNav()">Contul meu</a>
+  </div>
+
+  <!-- ============================================================
+    CONTINUT PAGINA
+  ============================================================ -->
+  <div class="page-content">
+
+    <div class="breadcrumb">
+      <a href="index.html">Acasă</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Coș de cumpărături</span>
+    </div>
+
+    <h1 class="page-title">Coșul <span>tău</span></h1>
+    <p class="cart-subtitle" id="cartSubtitle">Se încarcă...</p>
+
+    <!-- ZONA PRINCIPALA: populata din JS -->
+    <div class="cart-layout" id="cartLayout">
+      <!-- randat din renderCart() -->
+    </div>
+
+    <!-- PRODUSE RECOMANDATE – populat din JSON -->
+    <div class="recommended-section" id="recommendedSection" style="display:none">
+      <h2 class="rec-title">S-ar putea să-ți <span>placă</span></h2>
+      <div class="rec-grid" id="recGrid"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>
+      © 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 ·
+      <a href="legal/termeni.html">Termeni</a> ·
+      <a href="legal/retur.html">Retur</a>
+    </p>
+  </footer>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+
+  <!-- ============================================================
+    JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+      CONFIG
+    ============================================================ */
+    const CONFIG = {
+      JSON_PATH: './resources/produse.json',
+      FREE_SHIPPING_THRESHOLD: 200,   /* RON – livrare gratuita peste aceasta suma */
+      SHIPPING_COST: 15,              /* RON – cost transport sub prag */
+      RECOMMENDED_COUNT: 4,
+    };
+
+    /* ============================================================
+      COS (localStorage)
+      Cheia 'seekparts_cart' e folosita de toate paginile.
+    ============================================================ */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('seekparts_cart') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('seekparts_cart', JSON.stringify(cart));
+      updateCartBadge();
+      renderCart();
+    }
+
+    function updateCartBadge() {
+      const total = getCart().reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+    }
+
+    /* ============================================================
+      OPERATII COS
+    ============================================================ */
+    function updateQty(codOem, delta) {
+      const cart = getCart();
+      const item = cart.find(i => i.cod_oem === codOem);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      saveCart(cart);
+    }
+
+    function setQty(codOem, val) {
+      const cart = getCart();
+      const item = cart.find(i => i.cod_oem === codOem);
+      if (!item) return;
+      const n = parseInt(val);
+      if (isNaN(n) || n < 1) return;
+      item.qty = n;
+      saveCart(cart);
+    }
+
+    function removeItem(codOem) {
+      const cart = getCart().filter(i => i.cod_oem !== codOem);
+      saveCart(cart);
+      showToast('🗑️ Produs eliminat din coș.');
+    }
+
+    function clearCart() {
+      if (!confirm('Ești sigur că vrei să golești coșul?')) return;
+      saveCart([]);
+      showToast('Coșul a fost golit.');
+    }
+
+    /* ============================================================
+      CALCUL TOTAL
+    ============================================================ */
+    function calcTotals(cart) {
+      const subtotal  = cart.reduce((s, i) => s + i.pret * i.qty, 0);
+      const shipping  = subtotal >= CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : CONFIG.SHIPPING_COST;
+      const total     = subtotal + shipping;
+      return { subtotal, shipping, total };
+    }
+
+    /* ============================================================
+      RENDER COS
+    ============================================================ */
+    function renderCart() {
+      const cart = getCart();
+      const layout = document.getElementById('cartLayout');
+      const subtitle = document.getElementById('cartSubtitle');
+
+      updateCartBadge();
+
+      /* ---- COS GOL ---- */
+      if (cart.length === 0) {
+        subtitle.textContent = 'Coșul tău este gol.';
+        layout.innerHTML = `
+          <div class="empty-cart">
+            <div class="empty-icon">🛒</div>
+            <h2>Coșul tău este gol</h2>
+            <p>Adaugă produse din catalog pentru a putea finaliza o comandă.</p>
+            <a href="catalog.html" class="btn-go-catalog">← Înapoi la catalog</a>
+          </div>
+        `;
+        document.getElementById('recommendedSection').style.display = 'block';
+        return;
+      }
+
+      const itemCount = cart.reduce((s, i) => s + i.qty, 0);
+      subtitle.textContent = `${itemCount} produs${itemCount !== 1 ? 'e' : ''} în coș`;
+
+      const { subtotal, shipping, total } = calcTotals(cart);
+      const remainingForFree = CONFIG.FREE_SHIPPING_THRESHOLD - subtotal;
+
+      /* ---- LISTA PRODUSE ---- */
+      const itemsHTML = cart.map((item, i) => {
+        /* ---- IMAGINE ITEM ----
+           Daca item.imagine exista (din JSON) → <img> real.
+           Altfel → placeholder.
+           Joe: adauga "imagine" in produse.json pentru fiecare produs.
+        */
+        const imgHTML = item.imagine
+          ? `<img src="${item.imagine}" alt="${item.nume}" />`
+          : `
+            <div class="cart-item-img-placeholder">
+              <!-- PLACEHOLDER IMAGINE
+                   Joe: adauga "imagine": "URL" in produse.json
+                   pentru produsul cu cod_oem: ${item.cod_oem}
+              -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+              </svg>
+            </div>
+          `;
+
+        return `
+          <div class="cart-item" style="animation-delay:${i * 60}ms">
+            <!-- imagine -->
+            <div class="cart-item-img" onclick="goToProduct('${item.cod_oem}')" style="cursor:pointer">
+              ${imgHTML}
+            </div>
+
+            <!-- info + controale -->
+            <div class="cart-item-info">
+              <div class="cart-item-cat">${item.categorie || ''}</div>
+              <div class="cart-item-name" onclick="goToProduct('${item.cod_oem}')" style="cursor:pointer">
+                ${item.nume}
+              </div>
+              <div class="cart-item-oem">COD OEM: ${item.cod_oem}</div>
+              <div class="cart-item-controls">
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="updateQty('${item.cod_oem}', -1)">−</button>
+                  <span class="qty-num">${item.qty}</span>
+                  <button class="qty-btn" onclick="updateQty('${item.cod_oem}', 1)">+</button>
+                </div>
+                <button class="remove-btn" onclick="removeItem('${item.cod_oem}')">
+                  🗑️ Elimină
+                </button>
+              </div>
+            </div>
+
+            <!-- pret total pe linie -->
+            <div class="cart-item-price-col">
+              <div class="cart-item-price">${item.pret * item.qty} RON</div>
+              ${item.qty > 1 ? `<div class="cart-item-unit-price">${item.pret} RON / buc.</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      /* ---- BARA PROGRES LIVRARE GRATUITA ---- */
+      const progressPct = Math.min(100, (subtotal / CONFIG.FREE_SHIPPING_THRESHOLD) * 100);
+      const shippingBarHTML = `
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; margin-top:0.5rem;">
+          ${subtotal >= CONFIG.FREE_SHIPPING_THRESHOLD
+            ? `<p style="font-size:0.85rem; color:#00c864; font-weight:600;">✓ Ai livrare gratuită!</p>`
+            : `<p style="font-size:0.82rem; color:var(--muted); margin-bottom:0.75rem;">
+                Mai adaugă <strong style="color:var(--text)">${(remainingForFree).toFixed(0)} RON</strong> pentru livrare gratuită
+               </p>`
+          }
+          <div style="background:var(--surface2); border-radius:50px; height:6px; overflow:hidden;">
+            <div style="background:var(--accent); height:100%; width:${progressPct}%; border-radius:50px; transition:width 0.4s ease;"></div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:0.75rem;">
+          <button onclick="clearCart()" style="background:none;border:none;color:var(--muted);font-size:0.8rem;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--accent2)'" onmouseout="this.style.color='var(--muted)'">
+            🗑️ Golește coșul
+          </button>
+        </div>
+      `;
+
+      /* ---- SUMAR ---- */
+      const summaryHTML = `
+        <div class="cart-summary">
+          <div class="summary-title">Sumar comandă</div>
+
+          <div class="summary-line">
+            <span>Subtotal (${itemCount} produse)</span>
+            <strong>${subtotal} RON</strong>
+          </div>
+
+          <div class="summary-shipping">
+            <span>Transport</span>
+            ${shipping === 0
+              ? `<span class="shipping-free">Gratuit 🎉</span>`
+              : `<span class="shipping-cost">${shipping} RON</span>`
+            }
+          </div>
+
+          <div class="summary-total">
+            <span class="total-label">Total</span>
+            <span class="total-price">${total} RON</span>
+          </div>
+
+          <!-- metode de plata -->
+          <div class="payment-methods">
+            <span class="pay-badge">💳 Card</span>
+            <span class="pay-badge">🅿️ PayPal</span>
+            <span class="pay-badge"> Apple Pay</span>
+            <span class="pay-badge">G Pay</span>
+            <span class="pay-badge">📦 Ramburs</span>
+          </div>
+
+          <!-- BUTON CHECKOUT
+               Joe: checkout.html e pagina urmatoare din flow.
+               Daca o redenumesti, actualizeaza href-ul de mai jos.
+          -->
+          <button class="btn-checkout" onclick="goCheckout()">
+            Finalizează comanda →
+          </button>
+
+          <a href="catalog.html" class="btn-continue">
+            ← Continuă cumpărăturile
+          </a>
+
+          <p class="summary-note">
+            Prin plasarea comenzii ești de acord cu
+            <a href="legal/termeni.html">Termenii și condițiile</a> noastre.
+          </p>
+        </div>
+      `;
+
+      layout.innerHTML = `
+        <div>
+          <div class="cart-items-list">${itemsHTML}</div>
+          ${shippingBarHTML}
+        </div>
+        ${summaryHTML}
+      `;
+
+      document.getElementById('recommendedSection').style.display = 'block';
+    }
+
+    /* ============================================================
+      NAVIGARE
+    ============================================================ */
+    function goToProduct(codOem) {
+      window.location.href = `product-detail.html?cod=${encodeURIComponent(codOem)}`;
+    }
+
+    function goCheckout() {
+      const cart = getCart();
+      if (cart.length === 0) { showToast('Coșul tău este gol!'); return; }
+      /* LINK: duce la checkout.html
+         Joe: asigura-te ca checkout.html citeste cosul din localStorage
+      */
+      window.location.href = 'checkout.html';
+    }
+
+    /* ============================================================
+      PRODUSE RECOMANDATE
+      Incarca JSON si afiseaza primele N produse care nu sunt in cos.
+    ============================================================ */
+    async function loadRecommended() {
+      let raw = [];
+      try {
+        const res = await fetch(CONFIG.JSON_PATH);
+        if (!res.ok) return;
+        raw = await res.json();
+      } catch { return; }
+
+      const allProducts = raw.flatMap(group =>
+        (group.produse || []).map(p => ({ ...p, categorie: group.categorie || 'Altele', imagine: p.imagine || '' }))
+      );
+
+      const cartCodes = new Set(getCart().map(i => i.cod_oem));
+      const recs = allProducts.filter(p => !cartCodes.has(p.cod_oem)).slice(0, CONFIG.RECOMMENDED_COUNT);
+
+      const grid = document.getElementById('recGrid');
+      if (recs.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">Nicio recomandare disponibilă.</p>'; return; }
+
+      grid.innerHTML = recs.map(p => `
+        <div class="rec-card" onclick="goToProduct('${p.cod_oem}')">
+          <div class="rec-img">
+            ${p.imagine
+              ? `<img src="${p.imagine}" alt="${p.nume}" loading="lazy" />`
+              : `<!-- PLACEHOLDER – Joe: adauga "imagine" in JSON --> Fără imagine`
+            }
+          </div>
+          <div class="rec-body">
+            <div class="rec-name">${p.nume}</div>
+            <div class="rec-price">${p.pret} RON</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ============================================================
+      TOAST
+    ============================================================ */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* ============================================================
+      MOBILE NAV
+    ============================================================ */
+    function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+    function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+    /* ============================================================
+      INIT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartBadge();
+      renderCart();
+      loadRecommended();
+    });
+  </script>
+
+</body>
+</html>

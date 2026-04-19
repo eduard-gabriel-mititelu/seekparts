@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SeekParts – Piese auto originale și aftermarket. Peste 50.000 de referințe, livrare 24h, garanție 12 luni." />
+  <meta name="keywords" content="piese auto, piese masina, accesorii auto, bosch, brembo, livrare rapida" />
+  <title>SeekParts – Piese Auto Originale</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES – identice cu catalog.html si product-detail.html
+    ============================================================ */
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #1a1a1a;
+      --surface3:  #222222;
+      --border:    #2a2a2a;
+      --accent:    #e8ff00;
+      --accent2:   #ff4d00;
+      --text:      #f0f0f0;
+      --muted:     #666666;
+      --radius:    16px;
+      --radius-sm: 10px;
+      --nav-h:     64px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       NAVBAR
+       LINK-URI: catalog.html, account.html, cart.html, contact.html
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+      text-decoration: none;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--accent); }
+
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .nav-icon-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .nav-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-icon-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .cart-count {
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { color: var(--text); text-decoration: none; font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+    /* ============================================================
+       HERO SECTION – bento grid mare
+    ============================================================ */
+    .hero {
+      margin-top: var(--nav-h);
+      padding: 2rem 2rem 0;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ---- BENTO GRID ---- */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1rem;
+      margin-top: var(--nav-h);
+      padding: 1.5rem 2rem;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .bento-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    /* ---- CARD HERO (ocupa tot randul) ---- */
+    .bento-hero {
+      grid-column: span 12;
+      padding: 3.5rem;
+      background: var(--surface);
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    /* text decorativ de fundal */
+    .bento-hero::before {
+      content: 'SEEKPARTS';
+      position: absolute;
+      top: -20px; right: -30px;
+      font-family: 'Syne', sans-serif;
+      font-size: min(12rem, 18vw);
+      font-weight: 800;
+      color: rgba(232,255,0,0.035);
+      letter-spacing: -6px;
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* grid decorativ de puncte in fundal */
+    .bento-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(232,255,0,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(232,255,0,0.1);
+      border: 1px solid rgba(232,255,0,0.2);
+      border-radius: 50px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+      width: fit-content;
+    }
+    .hero-tag-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1.03;
+      letter-spacing: -2px;
+      max-width: 720px;
+      margin-bottom: 1.25rem;
+    }
+    .hero-h1 em { font-style: normal; color: var(--accent); }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      border: none;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ---- CARD STATS ---- */
+    .bento-stats {
+      grid-column: span 3;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .stat { display: flex; flex-direction: column; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    .stat-label { color: var(--muted); font-size: 0.82rem; margin-top: 0.2rem; }
+
+    /* ---- CARD SEARCH ---- */
+    .bento-search {
+      grid-column: span 5;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .bento-search h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1.1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+
+    .search-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1.4rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .search-btn:hover { background: #fff; }
+
+    .search-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .search-tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .search-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ---- CARD CATEGORII ---- */
+    .bento-cats {
+      grid-column: span 4;
+      padding: 2rem;
+    }
+
+    .bento-cats h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.25rem;
+    }
+
+    .cats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .cat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      display: block;
+    }
+    .cat-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .cat-chip .cat-icon { font-size: 1.6rem; display: block; margin-bottom: 0.35rem; }
+
+    /* ============================================================
+       SECTIUNEA PRODUSE FEATURED
+    ============================================================ */
+    .section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .section-title span { color: var(--accent); }
+
+    .view-all-btn {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .view-all-btn:hover { color: var(--accent); }
+
+    /* ---- GRID PRODUSE ---- */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ---- CARD PRODUS ---- */
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 0.4s ease both;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: #333;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+
+    /* ---- ZONA IMAGINE ----
+       Joe: inlocuieste .product-img-placeholder cu <img> cand adaugi imagini.
+       Adauga campul "imagine" in produse.json, cod va folosi automat URL-ul.
+       Dimensiune recomandata: 400x280px, WebP sau JPG.
+    ---- */
+    .product-img {
+      width: 100%; height: 170px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .product-img-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: center;
+      padding: 1rem;
+    }
+    .product-img-placeholder svg { width: 36px; height: 36px; opacity: 0.2; }
+
+    .product-badge {
+      position: absolute;
+      top: 0.6rem; left: 0.6rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-nou   { background: var(--accent); color: #000; }
+    .badge-promo { background: var(--accent2); color: #fff; }
+
+    .product-body { padding: 1.1rem; flex: 1; display: flex; flex-direction: column; }
+
+    .product-cat {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .product-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.4rem;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-oem { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.8rem; }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .add-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      width: 34px; height: 34px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .add-btn:hover { background: #fff; transform: scale(1.08); }
+
+    /* ---- SKELETON PRODUSE ---- */
+    @keyframes shimmer {
+      0%   { background-position: -700px 0; }
+      100% { background-position:  700px 0; }
+    }
+
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .sk {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 4px;
+    }
+    .sk-img-card { height: 170px; border-radius: 0; }
+    .sk-body { padding: 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .sk-cat  { height: 10px; width: 35%; }
+    .sk-name { height: 13px; width: 90%; }
+    .sk-name2{ height: 13px; width: 65%; }
+    .sk-oem  { height: 10px; width: 50%; }
+    .sk-foot { height: 32px; width: 100%; margin-top: 0.3rem; }
+
+    /* ============================================================
+       PROMO BANNER BENTO (2 carduri)
+    ============================================================ */
+    .promo-row {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+    }
+
+    .promo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promo-card.highlight {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .promo-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+    .promo-card.highlight h3 { color: #000; }
+
+    .promo-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 360px; }
+    .promo-card.highlight p { color: rgba(0,0,0,0.6); }
+
+    .promo-cta {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: #000;
+      color: var(--accent);
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 50px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .promo-cta:hover { background: #111; transform: translateY(-1px); }
+
+    .promo-icon {
+      position: absolute;
+      right: -15px; bottom: -15px;
+      font-size: 7rem;
+      opacity: 0.1;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       SECTIUNEA BRANDURI
+    ============================================================ */
+    .brands-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .brands-track {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 1.4rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .brand-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* ============================================================
+       NEWSLETTER
+    ============================================================ */
+    .newsletter-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .newsletter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-card::before {
+      content: '✉';
+      position: absolute;
+      right: -10px; top: -30px;
+      font-size: 10rem;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .newsletter-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.5px;
+    }
+    .newsletter-text h3 span { color: var(--accent); }
+    .newsletter-text p { color: var(--muted); font-size: 0.88rem; }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.75rem;
+      flex: 1;
+      max-width: 420px;
+    }
+    .newsletter-form input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .newsletter-form input:focus { border-color: var(--accent); }
+    .newsletter-form input::placeholder { color: var(--muted); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 3.5rem 2rem 2rem;
+    }
+
+    .footer-grid {
+      max-width: 1400px;
+      margin: 0 auto 3rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      display: block;
+    }
+    .footer-brand-name span { color: var(--accent); }
+
+    .footer-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.6; max-width: 280px; margin-bottom: 1.5rem; }
+
+    .social-links { display: flex; gap: 0.5rem; }
+    .social-link {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--muted);
+      font-family: 'Syne', sans-serif;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .footer-col a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-bottom p { color: var(--muted); font-size: 0.78rem; }
+
+    .payment-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .payment-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       CHATBOT
+    ============================================================ */
+    .chatbot-trigger {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 58px; height: 58px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1500;
+      box-shadow: 0 8px 32px rgba(232,255,0,0.25);
+      transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chatbot-trigger:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(232,255,0,0.35); }
+
+    .chatbot-window {
+      position: fixed;
+      bottom: 6.5rem; right: 2rem;
+      width: min(370px, calc(100vw - 2rem));
+      height: 500px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+      animation: fadeUp 0.3s ease;
+    }
+    .chatbot-window.open { display: flex; }
+
+    .chatbot-header {
+      padding: 1rem 1.2rem;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chatbot-header-info { display: flex; align-items: center; gap: 0.75rem; }
+    .chatbot-avatar {
+      width: 34px; height: 34px;
+      background: #000;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .chatbot-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: #000; }
+    .chatbot-status { font-size: 0.72rem; color: rgba(0,0,0,0.6); }
+    .chatbot-close { background: none; border: none; color: #000; cursor: pointer; font-size: 1.1rem; opacity: 0.6; }
+    .chatbot-close:hover { opacity: 1; }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .chatbot-messages::-webkit-scrollbar { width: 3px; }
+    .chatbot-messages::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .chat-msg {
+      max-width: 82%;
+      padding: 0.7rem 0.95rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .chat-msg.bot {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      border-radius: 4px 12px 12px 12px;
+    }
+    .chat-msg.user {
+      background: var(--accent);
+      color: #000;
+      align-self: flex-end;
+      border-radius: 12px 4px 12px 12px;
+      font-weight: 500;
+    }
+
+    .chat-typing {
+      align-self: flex-start;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px 12px 12px 12px;
+      padding: 0.7rem 0.95rem;
+      display: none;
+      gap: 4px;
+      align-items: center;
+    }
+    .chat-typing.visible { display: flex; }
+    .typing-dot {
+      width: 6px; height: 6px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: typingBounce 1.2s infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30%            { transform: translateY(-6px); }
+    }
+
+    .chat-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      padding: 0 1rem 0.5rem;
+    }
+    .chat-sugg {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.28rem 0.8rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chat-sugg:hover { border-color: var(--accent); color: var(--accent); }
+
+    .chatbot-input-row {
+      padding: 0.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.5rem;
+    }
+    .chatbot-input-row input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .chatbot-input-row input:focus { border-color: var(--accent); }
+    .chat-send-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      transition: all 0.2s;
+    }
+    .chat-send-btn:hover { background: #fff; }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-stack { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      max-width: 300px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ============================================================
+       ANIMATII
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1100px) {
+      .bento-stats { grid-column: span 4; }
+      .bento-search { grid-column: span 8; }
+      .bento-cats { grid-column: span 12; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .promo-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .bento { padding: 1rem; }
+      .bento-stats { grid-column: span 12; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
+      .bento-search { grid-column: span 12; }
+      .bento-cats { grid-column: span 12; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .newsletter-card { flex-direction: column; }
+      .newsletter-form { max-width: 100%; width: 100%; }
+      .hero-h1 { font-size: 2.2rem; letter-spacing: -1px; }
+    }
+
+    @media (max-width: 480px) {
+      .bento-hero { padding: 2rem; min-height: 260px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+      .cats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+    NAVBAR
+    LINK-URI DE ACTUALIZAT daca schimbi structura folderelor:
+      catalog.html, account.html, cart.html, contact.html
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Acasă</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <!-- buton cont – duce la account.html -->
+      <a href="account.html" class="nav-icon-btn" title="Contul meu">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Cont
+      </a>
+      <a href="cart.html" class="nav-icon-btn">
+        🛒 Coș <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="Meniu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- drawer mobil -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html"   onclick="closeMobileNav()">Acasă</a>
+    <a href="catalog.html" onclick="closeMobileNav()">Catalog</a>
+    <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+    <a href="account.html" onclick="closeMobileNav()">Contul meu</a>
+    <a href="cart.html"    onclick="closeMobileNav()">Coș 🛒</a>
+  </div>
+
+  <!-- ============================================================
+    BENTO GRID HERO
+  ============================================================ -->
+  <div class="bento">
+
+    <!-- CARD HERO PRINCIPAL -->
+    <div class="bento-card bento-hero">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="hero-tag-dot"></span>
+          Peste 50.000 de referințe disponibile
+        </div>
+        <h1 class="hero-h1">
+          Piese auto <em>originale</em><br>pentru orice mașină
+        </h1>
+        <p class="hero-sub">
+          Calitate garantată, livrare în 24–48h în toată România.<br>
+          Garanție 12 luni pe toate produsele.
+        </p>
+        <div class="hero-actions">
+          <a href="catalog.html" class="btn-primary">Explorează catalogul →</a>
+          <a href="contact.html" class="btn-ghost">Contactează-ne</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD STATISTICI -->
+    <div class="bento-card bento-stats">
+      <div class="stat">
+        <span class="stat-num" id="statProduse">–</span>
+        <span class="stat-label">Referințe disponibile</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">24h</span>
+        <span class="stat-label">Livrare rapidă</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">4.9★</span>
+        <span class="stat-label">Rating clienți</span>
+      </div>
+    </div>
+
+    <!-- CARD SEARCH
+         Trimite la catalog.html?q=... pentru a pre-popula search-ul
+    -->
+    <div class="bento-card bento-search">
+      <h3>Caută piesa ta</h3>
+      <div class="search-row">
+        <input
+          type="text"
+          class="search-input"
+          id="heroSearch"
+          placeholder="Piesă, cod OEM, brand, model mașină..."
+          onkeypress="if(event.key==='Enter') goSearch()"
+        />
+        <button class="search-btn" onclick="goSearch()">Caută</button>
+      </div>
+      <!-- cautari rapide populare -->
+      <div class="search-tags">
+        <span class="search-tag" onclick="quickSearch('Placute frana')">Plăcuțe frână</span>
+        <span class="search-tag" onclick="quickSearch('Filtru ulei')">Filtru ulei</span>
+        <span class="search-tag" onclick="quickSearch('Amortizor')">Amortizor</span>
+        <span class="search-tag" onclick="quickSearch('Brembo')">Brembo</span>
+        <span class="search-tag" onclick="quickSearch('Bosch')">Bosch</span>
+      </div>
+    </div>
+
+    <!-- CARD CATEGORII
+         Fiecare chip duce la catalog.html?cat=Categorie
+         Categoriile se potrivesc cu campul "categorie" din JSON.
+         Joe: actualizeaza href-urile daca adaugi categorii noi in JSON.
+    -->
+    <div class="bento-card bento-cats">
+      <h3>Categorii</h3>
+      <div class="cats-grid" id="catsGrid">
+        <!-- populat din JS dupa ce se incarca JSON-ul cu categoriile reale -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+    PRODUSE FEATURED
+    Primele 8 produse din JSON, cu skeleton loading.
+  ============================================================ -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Produse <span>populare</span></h2>
+      <a href="catalog.html" class="view-all-btn">Vezi toate →</a>
+    </div>
+    <div class="products-grid" id="featuredGrid">
+      <!-- skeleton initial -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+    PROMO BANNER
+  ============================================================ -->
+  <div class="promo-row">
+    <div class="promo-card highlight">
+      <h3>Livrare gratuită<br>peste 200 RON</h3>
+      <p>Comandă acum și beneficiezi de transport gratuit în toată România pentru comenzi ce depășesc 200 RON.</p>
+      <a href="catalog.html" class="promo-cta">Cumpără acum</a>
+      <span class="promo-icon">🚚</span>
+    </div>
+    <div class="promo-card">
+      <h3>Garanție<br>12 luni</h3>
+      <p>Toate produsele beneficiază de garanție de minimum 12 luni + 2 ani garanție legală.</p>
+      <a href="legal/garantie.html" class="btn-ghost" style="margin-top:1.5rem;display:inline-block">Detalii garanție</a>
+      <span class="promo-icon">🛡️</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+    BRANDURI
+    Extrase automat din JSON si afisate ca chips clicabile.
+  ============================================================ -->
+  <div class="brands-section">
+    <div class="section-header">
+      <h2 class="section-title">Branduri <span>de top</span></h2>
+    </div>
+    <div class="brands-track" id="brandsTrack">
+      <!-- populat din JS -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+    NEWSLETTER
+    Joe: conecteaza butonul la un backend real sau un serviciu
+    de email marketing (Mailchimp, Brevo etc.)
+  ============================================================ -->
+  <div class="newsletter-section">
+    <div class="newsletter-card">
+      <div class="newsletter-text">
+        <h3>Rămâi la curent cu <span>ofertele</span></h3>
+        <p>Abonează-te și primești −10% la prima comandă + oferte exclusive săptămânal.</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" id="newsletterEmail" placeholder="adresa@email.ro" />
+        <button class="search-btn" onclick="subscribeNewsletter()">Abonare</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+    FOOTER
+    LINK-URI: catalog.html, contact.html, account.html, cart.html
+    legal/termeni.html, legal/confidentialitate.html, legal/retur.html, legal/garantie.html
+    Joe: actualizeaza linkurile sociale cu URL-urile reale.
+  ============================================================ -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="footer-brand-name">Seek<span>Parts</span></a>
+        <p class="footer-desc">Partenerul tău de încredere pentru piese auto. Calitate garantată, prețuri competitive, livrare rapidă în toată România.</p>
+        <div class="social-links">
+          <!-- Joe: inlocuieste # cu URL-urile reale ale paginilor sociale -->
+          <a href="#" class="social-link" title="Facebook">f</a>
+          <a href="#" class="social-link" title="Instagram">ig</a>
+          <a href="#" class="social-link" title="TikTok">tt</a>
+          <a href="#" class="social-link" title="YouTube">yt</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Catalog</h4>
+        <ul>
+          <!-- LINK-URI CATEGORII – se potrivesc cu ?cat= din catalog.html -->
+          <li><a href="catalog.html?cat=Sistem Franare">Sistem Frânare</a></li>
+          <li><a href="catalog.html?cat=Motor">Motor</a></li>
+          <li><a href="catalog.html?cat=Suspensie">Suspensie</a></li>
+          <li><a href="catalog.html?cat=Electric">Electric</a></li>
+          <li><a href="catalog.html?cat=Interior">Interior</a></li>
+          <li><a href="catalog.html">Vezi toate</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Informații</h4>
+        <ul>
+          <li><a href="legal/termeni.html">Termeni și condiții</a></li>
+          <li><a href="legal/confidentialitate.html">Confidențialitate</a></li>
+          <li><a href="legal/retur.html">Politica de retur</a></li>
+          <li><a href="legal/garantie.html">Garanție</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Cont</h4>
+        <ul>
+          <li><a href="account.html">Autentificare</a></li>
+          <li><a href="account.html#register">Înregistrare</a></li>
+          <li><a href="account.html#orders">Comenzile mele</a></li>
+          <li><a href="cart.html">Coș de cumpărături</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <!-- DATE FIRMĂ – obligatorii conform regulamentului -->
+      <p>© 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 · J40/1234/2025 · Str. Industriilor 42, Timișoara</p>
+      <div class="payment-badges">
+        <span class="payment-badge">💳 Card</span>
+        <span class="payment-badge">🅿️ PayPal</span>
+        <span class="payment-badge"> Apple Pay</span>
+        <span class="payment-badge">G Google Pay</span>
+        <span class="payment-badge">📦 Ramburs</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+    CHATBOT AI
+    Raspunsuri preprogramate bazate pe cuvinte cheie.
+    Joe: pentru un chatbot real conecteaza la un API (OpenAI etc.)
+  ============================================================ -->
+  <button class="chatbot-trigger" id="chatTrigger" onclick="toggleChat()" title="Asistent AI">🤖</button>
+
+  <div class="chatbot-window" id="chatWindow">
+    <div class="chatbot-header">
+      <div class="chatbot-header-info">
+        <div class="chatbot-avatar">🤖</div>
+        <div>
+          <div class="chatbot-name">AutoBot SeekParts</div>
+          <div class="chatbot-status">Online · Răspunde instant</div>
+        </div>
+      </div>
+      <button class="chatbot-close" onclick="toggleChat()">✕</button>
+    </div>
+
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        Salut! Sunt AutoBot 👋<br>Te ajut să găsești piesa potrivită, să verifici disponibilitatea sau să afli detalii despre livrare.
+      </div>
+    </div>
+
+    <div class="chat-suggestions" id="chatSuggestions">
+      <span class="chat-sugg" onclick="sendSuggestion('Caut plăcuțe frână pentru BMW')">Plăcuțe BMW</span>
+      <span class="chat-sugg" onclick="sendSuggestion('Ce filtre de ulei aveți?')">Filtre ulei</span>
+      <span class="chat-sugg" onclick="sendSuggestion('Cum funcționează returul?')">Retur</span>
+      <span class="chat-sugg" onclick="sendSuggestion('Cât durează livrarea?')">Livrare</span>
+    </div>
+
+    <div class="chatbot-input-row">
+      <input type="text" id="chatInput" placeholder="Scrie un mesaj..."
+             onkeypress="if(event.key==='Enter') sendChat()" />
+      <button class="chat-send-btn" onclick="sendChat()">→</button>
+    </div>
+  </div>
+
+  <!-- TOAST STACK -->
+  <div class="toast-stack" id="toastStack"></div>
+
+
+  <!-- ============================================================
+    JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+      CONFIGURARE
+    ============================================================ */
+    const CONFIG = {
+      /* ---- CALEA JSON ----
+         Acelasi fisier ca in catalog.html si product-detail.html.
+         Toate paginile citesc din acelasi JSON.
+      */
+      JSON_PATH: './resources/produse.json',
+
+      /* cate produse featured sa afiseze pe homepage */
+      FEATURED_COUNT: 8,
+
+      /* cate branduri unice sa afiseze */
+      BRANDS_COUNT: 20,
+    };
+
+    /* ============================================================
+      ICONITE CATEGORII
+      Joe: adauga/modifica iconitele daca adaugi categorii noi in JSON.
+      Cheia trebuie sa fie identica cu campul "categorie" din JSON.
+    ============================================================ */
+    const CAT_ICONS = {
+      'Sistem Franare': '🔧',
+      'Motor':          '⚙️',
+      'Suspensie':      '🏎️',
+      'Electric':       '⚡',
+      'Caroserie':      '🚗',
+      'Interior':       '🪑',
+      'Accesorii':      '✨',
+      'Transmisie':     '🔩',
+      'Racire':         '🌡️',
+    };
+
+    /* ============================================================
+      COS (localStorage) – identic cu catalog.html si product-detail.html
+    ============================================================ */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('seekparts_cart') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('seekparts_cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    function addToCart(product) {
+      const cart = getCart();
+      const existing = cart.find(i => i.cod_oem === product.cod_oem);
+      if (existing) existing.qty += 1;
+      else cart.push({ ...product, qty: 1 });
+      saveCart(cart);
+      showToast(`✓ <strong>${product.nume.substring(0,35)}...</strong> adăugat în coș`);
+    }
+
+    function updateCartBadge() {
+      const total = getCart().reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+    }
+
+    /* ============================================================
+      FETCH JSON
+      Incarca produse, populeaza: categorii, produse featured, branduri, stat.
+    ============================================================ */
+    async function loadData() {
+      showSkeletons();
+
+      let raw = [];
+      try {
+        const res = await fetch(CONFIG.JSON_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        raw = await res.json();
+      } catch (err) {
+        /* ---- EROARE FETCH ----
+           Verifica ca resources/produse.json exista si rulezi pe server.
+        */
+        document.getElementById('featuredGrid').innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">
+            ⚠️ Nu s-au putut încărca produsele.<br>
+            <small style="font-size:0.78rem">${err.message}</small>
+          </div>
+        `;
+        return;
+      }
+
+      /* aplatizare JSON – identic cu catalog.html si product-detail.html */
+      const allProducts = raw.flatMap(group =>
+        (group.produse || []).map(p => ({
+          ...p,
+          categorie: group.categorie || 'Altele',
+          imagine: p.imagine || '',
+          /* ---- IMAGE PLACEHOLDER ----
+             Joe: adauga campul "imagine" in JSON pentru fiecare produs.
+             Codul va folosi automat URL-ul imaginii.
+          */
+        }))
+      );
+
+      /* ---- STAT: numar total produse ---- */
+      document.getElementById('statProduse').textContent =
+        allProducts.length >= 1000
+          ? Math.floor(allProducts.length / 1000) + 'K+'
+          : allProducts.length + '+';
+
+      /* ---- CATEGORII (extrase automat din JSON) ---- */
+      const cats = [...new Set(allProducts.map(p => p.categorie))];
+      renderCategories(cats);
+
+      /* ---- PRODUSE FEATURED (primele N din lista) ---- */
+      const featured = allProducts.slice(0, CONFIG.FEATURED_COUNT);
+      renderFeatured(featured, allProducts);
+
+      /* ---- BRANDURI (extrase automat, sortate alfabetic) ---- */
+      const brands = [...new Set(allProducts.map(p => p.brand).filter(Boolean))].sort();
+      renderBrands(brands, allProducts);
+    }
+
+    /* ============================================================
+      RENDER CATEGORII in bento grid
+    ============================================================ */
+    function renderCategories(cats) {
+      const grid = document.getElementById('catsGrid');
+      grid.innerHTML = cats.map(cat => `
+        <!-- LINK categorie: duce la catalog.html?cat=Categorie
+             care pre-filtreaza catalogul pe acea categorie -->
+        <a href="catalog.html?cat=${encodeURIComponent(cat)}" class="cat-chip">
+          <span class="cat-icon">${CAT_ICONS[cat] || '📦'}</span>
+          ${cat}
+        </a>
+      `).join('');
+    }
+
+    /* ============================================================
+      RENDER PRODUSE FEATURED
+    ============================================================ */
+    function renderFeatured(products, allProducts) {
+      const grid = document.getElementById('featuredGrid');
+      if (products.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem">Niciun produs disponibil.</div>`;
+        return;
+      }
+      grid.innerHTML = products.map((p, i) => renderProductCard(p, i)).join('');
+    }
+
+    /* ============================================================
+      RENDER CARD PRODUS (homepage version)
+    ============================================================ */
+    function renderProductCard(p, index) {
+      const delay = Math.min(index * 50, 400);
+
+      /* ---- IMAGINE ----
+         Daca p.imagine e gol → placeholder SVG.
+         Daca p.imagine are URL → <img> real.
+         Joe: adauga "imagine" in JSON.
+      */
+      const imgHTML = p.imagine
+        ? `<img src="${p.imagine}" alt="${p.nume}" loading="lazy" />`
+        : `
+          <div class="product-img-placeholder">
+            <!-- PLACEHOLDER IMAGINE
+                 Joe: adauga campul "imagine": "URL" in produse.json
+                 pentru acest produs (cod_oem: ${p.cod_oem})
+                 Dimensiune recomandata: 400x280px
+            -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+          </div>
+        `;
+
+      return `
+        <div class="product-card" style="animation-delay:${delay}ms"
+             onclick="goToProduct('${p.cod_oem}')">
+          <div class="product-img">
+            ${imgHTML}
+          </div>
+          <div class="product-body">
+            <div class="product-cat">${p.categorie}</div>
+            <div class="product-name">${p.nume}</div>
+            <div class="product-oem">COD: ${p.cod_oem}</div>
+            <div class="product-footer">
+              <div class="product-price">${p.pret} RON</div>
+              <!-- stopPropagation ca sa nu navigam la detaliu cand dam Add -->
+              <button class="add-btn"
+                      onclick="event.stopPropagation(); handleAdd('${p.cod_oem}')"
+                      title="Adaugă în coș">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ============================================================
+      RENDER BRANDURI
+    ============================================================ */
+    function renderBrands(brands, allProducts) {
+      const track = document.getElementById('brandsTrack');
+      const visible = brands.slice(0, CONFIG.BRANDS_COUNT);
+      track.innerHTML = visible.map(brand => `
+        <!-- Click pe brand → catalog filtrat dupa brand -->
+        <a href="catalog.html?q=${encodeURIComponent(brand)}" class="brand-chip">${brand}</a>
+      `).join('');
+    }
+
+    /* ============================================================
+      SKELETON LOADING
+    ============================================================ */
+    function showSkeletons() {
+      const grid = document.getElementById('featuredGrid');
+      grid.innerHTML = Array.from({ length: CONFIG.FEATURED_COUNT }, () => `
+        <div class="skeleton-card">
+          <div class="sk sk-img-card"></div>
+          <div class="sk-body">
+            <div class="sk sk-cat"></div>
+            <div class="sk sk-name"></div>
+            <div class="sk sk-name2"></div>
+            <div class="sk sk-oem"></div>
+            <div class="sk sk-foot"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ============================================================
+      NAVIGARE
+    ============================================================ */
+    function goToProduct(codOem) {
+      window.location.href = `product-detail.html?cod=${encodeURIComponent(codOem)}`;
+    }
+
+    /* ---- handleAdd: gaseste produsul in allProducts din DOM ----
+       Nota: allProducts nu e in scope global, asa ca re-fetch-uim din cart
+       sau pastram o referinta. Solutie simpla: stocam allProducts global.
+    */
+    let _allProducts = [];
+
+    function handleAdd(codOem) {
+      const p = _allProducts.find(x => x.cod_oem === codOem);
+      if (p) addToCart(p);
+    }
+
+    /* override loadData sa stocheze allProducts global */
+    const _originalLoad = loadData;
+
+    /* ============================================================
+      SEARCH
+    ============================================================ */
+    function goSearch() {
+      const q = document.getElementById('heroSearch').value.trim();
+      if (!q) return;
+      /* trimite la catalog.html cu query in URL
+         catalog.html citeste ?q= si pre-populeaza search-ul automat */
+      window.location.href = `catalog.html?q=${encodeURIComponent(q)}`;
+    }
+
+    function quickSearch(term) {
+      window.location.href = `catalog.html?q=${encodeURIComponent(term)}`;
+    }
+
+    /* ============================================================
+      NEWSLETTER
+    ============================================================ */
+    function subscribeNewsletter() {
+      const email = document.getElementById('newsletterEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        showToast('⚠️ Introdu o adresă de email validă.');
+        return;
+      }
+      document.getElementById('newsletterEmail').value = '';
+      showToast('🎉 Abonare reușită! Verifică emailul pentru −10% reducere.');
+      /* Joe: trimite email-ul la un serviciu real (Mailchimp, Brevo etc.)
+         folosind fetch() catre API-ul lor. */
+    }
+
+    /* ============================================================
+      CHATBOT
+    ============================================================ */
+    const BOT_RESPONSES = {
+      'frân':    'Avem discuri, plăcuțe, etriere și lichid de frână pentru toate modelele. Ce mașină ai?',
+      'motor':   'Filtre, kit distribuție, garnituri, pompă apă — avem tot pentru sistemul motor. Spune-mi modelul!',
+      'livrare': 'Livrăm în 24–48h prin Fan Courier și DPD. Gratuit peste 200 RON!',
+      'retur':   'Ai 14 zile pentru retur, fără nicio justificare. Produsul trebuie nemontat, în ambalaj original.',
+      'preț':    'Prețurile includ TVA. Avem promoții săptămânale în catalog!',
+      'garanție':'Garanție legală 2 ani + garanție comercială 12 luni pe toate produsele.',
+      'plat':    'Acceptăm: card bancar, PayPal, Apple Pay, Google Pay și ramburs la livrare.',
+      'bmw':     'Avem piese pentru toată gama BMW: E46, E90, F30, X3, X5 etc. Ce model și ce piesă?',
+      'dacia':   'Stoc bogat pentru Logan, Sandero, Duster, Dokker. Ce piesă cauți?',
+      'vw':      'Golf, Passat, Tiguan, Polo — avem stoc pentru toate modelele VW.',
+      'filtru':  'Filtre de ulei, aer, combustibil și habitaclu pentru toate mărcile. Ce mașină?',
+      'default': 'Înțeleg! Poți da mai multe detalii? (marcă mașină, model, an fabricație) ca să-ți dau cea mai bună recomandare.',
+    };
+
+    function getBotResponse(msg) {
+      const lower = msg.toLowerCase();
+      for (const [key, resp] of Object.entries(BOT_RESPONSES)) {
+        if (lower.includes(key)) return resp;
+      }
+      return BOT_RESPONSES.default;
+    }
+
+    function toggleChat() {
+      document.getElementById('chatWindow').classList.toggle('open');
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+      input.value = '';
+      addChatMsg(msg, 'user');
+      document.getElementById('chatSuggestions').style.display = 'none';
+      showTyping();
+      setTimeout(() => {
+        hideTyping();
+        addChatMsg(getBotResponse(msg), 'bot');
+      }, 1100);
+    }
+
+    function sendSuggestion(msg) {
+      document.getElementById('chatInput').value = msg;
+      sendChat();
+    }
+
+    function addChatMsg(text, type) {
+      const msgs = document.getElementById('chatMessages');
+      const el = document.createElement('div');
+      el.className = `chat-msg ${type}`;
+      el.textContent = text;
+      msgs.appendChild(el);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    let typingEl = null;
+    function showTyping() {
+      const msgs = document.getElementById('chatMessages');
+      typingEl = document.createElement('div');
+      typingEl.className = 'chat-typing visible';
+      typingEl.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      msgs.appendChild(typingEl);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+    function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+    /* ============================================================
+      TOAST
+    ============================================================ */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* ============================================================
+      MOBILE NAV
+    ============================================================ */
+    function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+    function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+    /* ============================================================
+      INIT
+      Ordinea de executie:
+      1. updateCartBadge – afiseaza nr. produse in cos din localStorage
+      2. loadData – fetch JSON, populeaza totul
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', async () => {
+      updateCartBadge();
+
+      /* fetch + stocare globala allProducts pentru handleAdd() */
+      showSkeletons();
+      let raw = [];
+      try {
+        const res = await fetch(CONFIG.JSON_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        raw = await res.json();
+      } catch (err) {
+        document.getElementById('featuredGrid').innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">
+            ⚠️ Nu s-au putut încărca produsele. Verifica <code>resources/produse.json</code><br>
+            <small style="font-size:0.75rem">${err.message}</small>
+          </div>
+        `;
+        return;
+      }
+
+      _allProducts = raw.flatMap(group =>
+        (group.produse || []).map(p => ({
+          ...p,
+          categorie: group.categorie || 'Altele',
+          imagine: p.imagine || '',
+        }))
+      );
+
+      /* stat */
+      document.getElementById('statProduse').textContent =
+        _allProducts.length >= 1000
+          ? Math.floor(_allProducts.length / 1000) + 'K+'
+          : _allProducts.length + '+';
+
+      /* categorii */
+      const cats = [...new Set(_allProducts.map(p => p.categorie))];
+      renderCategories(cats);
+
+      /* featured */
+      renderFeatured(_allProducts.slice(0, CONFIG.FEATURED_COUNT), _allProducts);
+
+      /* branduri */
+      const brands = [...new Set(_allProducts.map(p => p.brand).filter(Boolean))].sort();
+      renderBrands(brands, _allProducts);
+    });
+  </script>
+
+</body>
+</html>

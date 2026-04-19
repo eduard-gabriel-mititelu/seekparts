@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Meta tags SEO – actualizate dinamic din JS dupa ce se incarca produsul -->
+  <meta name="description" content="Detalii produs – SeekParts" id="metaDesc" />
+  <title>Produs – SeekParts</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES – identice cu catalog.html si index.html
+       Schimba o singura data aici daca vrei alt tema.
+    ============================================================ */
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #1a1a1a;
+      --surface3:  #222222;
+      --border:    #2a2a2a;
+      --accent:    #e8ff00;
+      --accent2:   #ff4d00;
+      --text:      #f0f0f0;
+      --muted:     #666666;
+      --radius:    14px;
+      --radius-sm: 8px;
+      --nav-h:     64px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       NAVBAR – acelasi ca in catalog.html
+       LINK-URI DE ACTUALIZAT daca schimbi structura folderelor:
+         index.html, catalog.html, account.html, cart.html
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      text-decoration: none;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .nav-icon-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .nav-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-icon-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .cart-count {
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { color: var(--text); text-decoration: none; font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+    /* ============================================================
+       LAYOUT PAGINA
+    ============================================================ */
+    .page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 2rem) 2rem 4rem;
+    }
+
+    /* ---- BREADCRUMB ---- */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--border); }
+    .breadcrumb-current { color: var(--text); }
+
+    /* ============================================================
+       SECTIUNEA PRINCIPALA PRODUS (imagine + info)
+    ============================================================ */
+    .product-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    /* ---- COLOANA IMAGINE ---- */
+    .product-gallery { display: flex; flex-direction: column; gap: 1rem; }
+
+    .product-img-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .product-img-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ---- PLACEHOLDER IMAGINE PRODUS ----
+       Joe: inlocuieste tot div-ul .img-placeholder cu:
+         <img src="URL_IMAGINE_PRODUS" alt="Nume produs" />
+       sau adauga campul "imagine" in JSON si codul de mai jos
+       il va folosi automat.
+       Dimensiune recomandata: 800x600px, WebP sau JPG.
+    ---- */
+    .img-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--muted);
+      padding: 2rem;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+    }
+    .img-placeholder svg {
+      width: 64px; height: 64px;
+      opacity: 0.2;
+    }
+    .img-placeholder p { font-size: 0.85rem; line-height: 1.5; }
+    .img-placeholder small { font-size: 0.72rem; color: var(--muted); opacity: 0.6; font-family: monospace; }
+
+    /* thumbnails (deocamdata placeholder, Joe adauga imagini) */
+    .product-thumbs {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .thumb {
+      width: 64px; height: 64px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: center;
+      transition: border-color 0.2s;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .thumb:hover, .thumb.active { border-color: var(--accent); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ---- COLOANA INFORMATII PRODUS ---- */
+    .product-info { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .product-categorie {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+
+    .product-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .product-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .meta-badge strong { color: var(--text); font-weight: 600; }
+
+    .product-desc-full {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      padding: 1.25rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .product-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -1px;
+    }
+
+    .price-with-vat {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ---- DISPONIBILITATE ---- */
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+    }
+    .stock-badge.in-stock { background: rgba(0,200,100,0.12); color: #00c864; border: 1px solid rgba(0,200,100,0.2); }
+    .stock-badge.out-stock { background: rgba(255,77,0,0.12); color: var(--accent2); border: 1px solid rgba(255,77,0,0.2); }
+    .stock-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ---- CANTITATE + ADD TO CART ---- */
+    .add-to-cart-section { display: flex; flex-direction: column; gap: 1rem; }
+
+    .qty-row { display: flex; align-items: center; gap: 1rem; }
+
+    .qty-label { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--surface3); }
+
+    .qty-display {
+      width: 40px;
+      text-align: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 0 0.5rem;
+      line-height: 36px;
+    }
+
+    .btn-add-cart {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 1rem 2rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .btn-add-cart:hover { background: #fff; transform: translateY(-1px); }
+    .btn-add-cart:active { transform: translateY(0); }
+    .btn-add-cart:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-wishlist {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-wishlist:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    .cart-actions-row { display: flex; gap: 0.75rem; }
+
+    /* garantie + livrare mini-info */
+    .product-guarantees {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .guarantee-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .guarantee-icon { font-size: 1rem; flex-shrink: 0; }
+
+    /* ============================================================
+       TABS (Descriere / Specificatii / Compatibilitate)
+    ============================================================ */
+    .tabs-section { margin-bottom: 4rem; }
+
+    .tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.9rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .tab-panel { display: none; animation: fadeUp 0.3s ease; }
+    .tab-panel.active { display: block; }
+
+    .specs-table { width: 100%; border-collapse: collapse; }
+    .specs-table tr { border-bottom: 1px solid var(--border); }
+    .specs-table tr:last-child { border-bottom: none; }
+    .specs-table td {
+      padding: 0.85rem 1rem;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .specs-table td:first-child {
+      color: var(--muted);
+      width: 40%;
+      font-weight: 500;
+    }
+    .specs-table td:last-child { color: var(--text); }
+    .specs-table tr:nth-child(odd) td { background: var(--surface2); }
+
+    /* ============================================================
+       PRODUSE SIMILARE
+    ============================================================ */
+    .similar-section { }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.5rem;
+    }
+    .section-title span { color: var(--accent); }
+
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    /* card similar – versiune mai mica decat in catalog */
+    .similar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .similar-card:hover { transform: translateY(-3px); border-color: #333; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+
+    .similar-img {
+      width: 100%; height: 130px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 0.72rem;
+      overflow: hidden;
+    }
+    .similar-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .similar-body { padding: 0.9rem; }
+    .similar-cat { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; }
+    .similar-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .similar-price { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--accent); }
+
+    /* ============================================================
+       SKELETON LOADING
+    ============================================================ */
+    @keyframes shimmer {
+      0%   { background-position: -700px 0; }
+      100% { background-position:  700px 0; }
+    }
+
+    .sk {
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 700px 100%;
+      animation: shimmer 1.4s infinite linear;
+    }
+
+    .skeleton-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+    .sk-img-main { aspect-ratio: 4/3; border-radius: var(--radius); }
+    .sk-info { display: flex; flex-direction: column; gap: 1.2rem; padding-top: 0.5rem; }
+    .sk-cat  { height: 12px; width: 30%; }
+    .sk-name { height: 32px; width: 90%; }
+    .sk-name2{ height: 32px; width: 65%; }
+    .sk-badge{ height: 28px; width: 45%; border-radius: 50px; }
+    .sk-desc { height: 80px; width: 100%; border-radius: var(--radius-sm); }
+    .sk-price{ height: 44px; width: 40%; }
+    .sk-btn  { height: 52px; width: 100%; border-radius: var(--radius-sm); }
+
+    /* ============================================================
+       PAGINA 404 (produs negasit)
+    ============================================================ */
+    .not-found {
+      text-align: center;
+      padding: 6rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .not-found-icon { font-size: 5rem; }
+    .not-found h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+    .not-found p { color: var(--muted); max-width: 360px; line-height: 1.6; }
+    .not-found a {
+      background: var(--accent);
+      color: #000;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .not-found a:hover { background: #fff; }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-stack { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      max-width: 300px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ============================================================
+       ANIMATII
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .product-main { grid-template-columns: 1fr; gap: 2rem; }
+      .skeleton-main { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .similar-grid { grid-template-columns: repeat(2, 1fr); }
+      .tabs-header { overflow-x: auto; }
+      .tab-btn { white-space: nowrap; }
+    }
+
+    @media (max-width: 480px) {
+      .page-content { padding: calc(var(--nav-h) + 1rem) 1rem 3rem; }
+      .similar-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+    NAVBAR
+    LINK-URI: index.html, catalog.html, account.html, cart.html
+    Daca le muti in alt folder, actualizeaza href-urile de mai jos.
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Acasă</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <!-- Buton cont utilizator – duce la account.html -->
+      <a href="account.html" class="nav-icon-btn" title="Contul meu">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        Cont
+      </a>
+      <a href="cart.html" class="nav-icon-btn">
+        🛒 Coș <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="Meniu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html"   onclick="closeMobileNav()">Acasă</a>
+    <a href="catalog.html" onclick="closeMobileNav()">Catalog</a>
+    <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+    <a href="account.html" onclick="closeMobileNav()">Contul meu</a>
+    <a href="cart.html"    onclick="closeMobileNav()">Coș 🛒</a>
+  </div>
+
+  <!-- ============================================================
+    CONTINUT PAGINA
+    Populat complet din JavaScript dupa fetch JSON.
+  ============================================================ -->
+  <div class="page-content">
+
+    <!-- BREADCRUMB – actualizat din JS -->
+    <div class="breadcrumb" id="breadcrumb">
+      <a href="index.html">Acasă</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="catalog.html">Catalog</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current" id="breadcrumbProduct">Se încarcă...</span>
+    </div>
+
+    <!-- ZONA PRINCIPALA – skeleton initial, inlocuit dupa fetch -->
+    <div id="productZone">
+      <!-- Skeleton loading afisat pana vine JSON-ul -->
+      <div class="skeleton-main">
+        <div class="sk sk-img-main"></div>
+        <div class="sk-info">
+          <div class="sk sk-cat"></div>
+          <div class="sk sk-name"></div>
+          <div class="sk sk-name2"></div>
+          <div class="sk sk-badge"></div>
+          <div class="sk sk-desc"></div>
+          <div class="sk sk-price"></div>
+          <div class="sk sk-btn"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUSE SIMILARE – populat din JS -->
+    <div id="similarSection"></div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      © 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 ·
+      <a href="legal/termeni.html">Termeni</a> ·
+      <a href="legal/confidentialitate.html">Confidențialitate</a> ·
+      <a href="legal/retur.html">Retur</a>
+    </p>
+  </footer>
+
+  <!-- TOAST STACK -->
+  <div class="toast-stack" id="toastStack"></div>
+
+
+  <!-- ============================================================
+    JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+      CONFIGURARE
+    ============================================================ */
+    const CONFIG = {
+      /* ---- CALEA JSON ----
+         Acelasi fisier ca in catalog.html.
+         Daca il muti, actualizeaza si in catalog.html.
+      */
+      JSON_PATH: './resources/produse.json',
+
+      /* cate produse similare sa afiseze */
+      SIMILAR_COUNT: 4,
+    };
+
+    /* ============================================================
+      STATE
+    ============================================================ */
+    let currentProduct = null;
+    let allProducts    = [];
+    let qty            = 1;
+
+    /* ============================================================
+      COS (localStorage) – identic cu catalog.html
+      Cheia 'seekparts_cart' e folosita de toate paginile.
+    ============================================================ */
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('seekparts_cart') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('seekparts_cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    function addToCart(product, quantity = 1) {
+      const cart = getCart();
+      const existing = cart.find(i => i.cod_oem === product.cod_oem);
+      if (existing) existing.qty += quantity;
+      else cart.push({ ...product, qty: quantity });
+      saveCart(cart);
+      showToast(`✓ <strong>${quantity}×</strong> ${product.nume.substring(0,35)}... adăugat în coș`);
+    }
+
+    function updateCartBadge() {
+      const total = getCart().reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+    }
+
+    /* ============================================================
+      FETCH JSON + GASIRE PRODUS DUPA COD OEM DIN URL
+      URL asteptat: product-detail.html?cod=COD_OEM
+      Daca lipseste parametrul sau nu se gaseste produsul → 404 stilizat.
+    ============================================================ */
+    async function loadProduct() {
+      /* citeste ?cod= din URL */
+      const params = new URLSearchParams(window.location.search);
+      const codOem = params.get('cod');
+
+      if (!codOem) {
+        renderNotFound('Niciun cod de produs specificat în URL.');
+        return;
+      }
+
+      let raw = [];
+      try {
+        const res = await fetch(CONFIG.JSON_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        raw = await res.json();
+      } catch (err) {
+        /* ---- EROARE FETCH ----
+           Verifica:
+           1. produse.json exista in folderul resources/
+           2. Rulezi pe un server (nu file://)
+        */
+        renderNotFound(`Nu s-a putut încărca baza de date. (${err.message})`);
+        return;
+      }
+
+      /* aplatizare JSON – identic cu catalog.html */
+      allProducts = raw.flatMap(group =>
+        (group.produse || []).map(p => ({
+          ...p,
+          categorie: group.categorie || 'Altele',
+          imagine: p.imagine || '',
+          /* ---- IMAGE PLACEHOLDER ----
+             Joe: adauga in JSON campul:
+               "imagine": "https://domeniultau.ro/img/cod_oem.jpg"
+             sau pune imaginile in /resources/img/ si foloseste:
+               "imagine": "./resources/img/0986424795.jpg"
+          */
+        }))
+      );
+
+      /* gasire produs dupa cod_oem */
+      currentProduct = allProducts.find(p => p.cod_oem === decodeURIComponent(codOem));
+
+      if (!currentProduct) {
+        renderNotFound(`Produsul cu codul OEM <strong>${codOem}</strong> nu a fost găsit.`);
+        return;
+      }
+
+      renderProduct(currentProduct);
+      renderSimilar(currentProduct);
+    }
+
+    /* ============================================================
+      RENDER PRODUS
+    ============================================================ */
+    function renderProduct(p) {
+      /* actualizeaza titlul paginii si meta description pentru SEO */
+      document.title = `${p.nume} – SeekParts`;
+      document.getElementById('metaDesc').setAttribute('content', p.descriere || p.nume);
+
+      /* breadcrumb */
+      document.getElementById('breadcrumbProduct').textContent = p.nume.substring(0, 40) + '...';
+
+      /* ---- HTML IMAGINE ----
+         Daca p.imagine exista → <img> real.
+         Daca nu → placeholder cu instructiuni pentru Joe.
+      */
+      const imgHTML = p.imagine
+        ? `<img src="${p.imagine}" alt="${p.nume}" />`
+        : `
+          <div class="img-placeholder">
+            <!-- PLACEHOLDER IMAGINE PRODUS
+                 Joe: adauga campul "imagine" in JSON pentru acest produs:
+                   "cod_oem": "${p.cod_oem}",
+                   "imagine": "URL_SAU_CALE_LOCALA_IMAGINE"
+                 Sau inlocuieste direct acest div cu:
+                   <img src="URL_IMAGINE" alt="${p.nume}" />
+                 Dimensiune recomandata: 800x600px
+            -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <p>Imagine indisponibilă</p>
+            <small>COD OEM: ${p.cod_oem}</small>
+          </div>
+        `;
+
+      const html = `
+        <!-- SECTIUNEA PRINCIPALA PRODUS -->
+        <div class="product-main" style="animation: fadeUp 0.4s ease;">
+
+          <!-- GALERIE IMAGINE -->
+          <div class="product-gallery">
+            <div class="product-img-main">
+              ${imgHTML}
+            </div>
+            <!-- THUMBNAILS
+                 Joe: inlocuieste textul din .thumb cu <img src="..." /> cand ai imagini multiple.
+                 Momentan sunt placeholder-e.
+            -->
+            <div class="product-thumbs">
+              <div class="thumb active">
+                ${p.imagine ? `<img src="${p.imagine}" alt="thumb 1" />` : 'Img 1'}
+              </div>
+              <div class="thumb">Img 2</div>
+              <div class="thumb">Img 3</div>
+            </div>
+          </div>
+
+          <!-- INFORMATII PRODUS -->
+          <div class="product-info">
+            <div class="product-categorie">${p.categorie}</div>
+            <h1 class="product-name">${p.nume}</h1>
+
+            <!-- META: brand + cod OEM -->
+            <div class="product-meta">
+              <span class="meta-badge">Brand: <strong>${p.brand || 'N/A'}</strong></span>
+              <span class="meta-badge">COD OEM: <strong>${p.cod_oem}</strong></span>
+            </div>
+
+            <!-- DESCRIERE -->
+            <div class="product-desc-full">${p.descriere || 'Descriere indisponibilă.'}</div>
+
+            <!-- PRET -->
+            <div class="product-price-row">
+              <div class="product-price">${p.pret} RON</div>
+              <span class="price-with-vat">(incl. TVA)</span>
+            </div>
+
+            <!-- DISPONIBILITATE
+                 Joe: poti adauga campul "stoc": true/false in JSON
+                 si sa inlocuiesti "true" de mai jos cu p.stoc
+            -->
+            <span class="stock-badge in-stock">
+              <span class="stock-dot"></span>
+              În stoc
+            </span>
+
+            <!-- CANTITATE + BUTOANE -->
+            <div class="add-to-cart-section">
+              <div class="qty-row">
+                <span class="qty-label">Cantitate:</span>
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                  <span class="qty-display" id="qtyDisplay">1</span>
+                  <button class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+              </div>
+              <div class="cart-actions-row">
+                <button class="btn-add-cart" onclick="handleAddToCart()">
+                  🛒 Adaugă în coș
+                </button>
+                <button class="btn-wishlist" title="Adaugă la favorite" onclick="showToast('❤️ Adăugat la favorite')">♡</button>
+              </div>
+            </div>
+
+            <!-- GARANTII + LIVRARE -->
+            <div class="product-guarantees">
+              <div class="guarantee-item"><span class="guarantee-icon">🛡️</span> Garanție 12 luni</div>
+              <div class="guarantee-item"><span class="guarantee-icon">🚚</span> Livrare 24-48h în toată România</div>
+              <div class="guarantee-item"><span class="guarantee-icon">↩️</span> Retur gratuit în 14 zile</div>
+              <div class="guarantee-item"><span class="guarantee-icon">🔒</span> Plată securizată</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS: Specificatii / Compatibilitate / Livrare -->
+        <div class="tabs-section">
+          <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('specs', this)">Specificații</button>
+            <button class="tab-btn" onclick="switchTab('compat', this)">Compatibilitate</button>
+            <button class="tab-btn" onclick="switchTab('livrare', this)">Livrare & Retur</button>
+          </div>
+
+          <!-- TAB: SPECIFICATII -->
+          <div class="tab-panel active" id="tab-specs">
+            <table class="specs-table">
+              <tr><td>Brand</td><td>${p.brand || '–'}</td></tr>
+              <tr><td>Cod OEM</td><td>${p.cod_oem}</td></tr>
+              <tr><td>Categorie</td><td>${p.categorie}</td></tr>
+              <tr><td>Preț</td><td>${p.pret} RON (incl. TVA)</td></tr>
+              <tr><td>Garanție</td><td>12 luni comercial + 2 ani legal</td></tr>
+              <tr><td>Stare</td><td>Nou</td></tr>
+              <!-- Joe: adauga mai multe randuri cu specificatii din JSON
+                   dupa ce adaugi campurile corespunzatoare in produse.json
+                   ex: "greutate", "dimensiuni", "material" etc.
+              -->
+            </table>
+          </div>
+
+          <!-- TAB: COMPATIBILITATE
+               Joe: adauga campul "compatibilitate": ["VW Golf 5", "VW Golf 6"]
+               in JSON si actualizeaza codul de mai jos sa il citeasca.
+               Momentan extragem din campul "nume" care contine info compatibilitate.
+          -->
+          <div class="tab-panel" id="tab-compat">
+            <p style="color:var(--muted); font-size:0.9rem; line-height:1.7; margin-bottom:1rem;">
+              Informațiile de compatibilitate sunt extrase din denumirea produsului.
+              Pentru confirmare exactă, verificați codul OEM cu furnizorul.
+            </p>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1.25rem;">
+              <strong style="color:var(--accent); font-family:'Syne',sans-serif; font-size:0.9rem;">Compatibil cu:</strong>
+              <p style="color:var(--text); margin-top:0.5rem; font-size:0.9rem; line-height:1.6;">${p.nume}</p>
+              <p style="color:var(--muted); font-size:0.8rem; margin-top:0.75rem;">
+                COD OEM: <strong style="color:var(--text); font-family:monospace;">${p.cod_oem}</strong>
+              </p>
+            </div>
+          </div>
+
+          <!-- TAB: LIVRARE & RETUR -->
+          <div class="tab-panel" id="tab-livrare">
+            <table class="specs-table">
+              <tr><td>Termen livrare</td><td>24–48 ore lucrătoare</td></tr>
+              <tr><td>Transport gratuit</td><td>Comenzi peste 200 RON</td></tr>
+              <tr><td>Cost transport</td><td>15 RON (sub 200 RON)</td></tr>
+              <tr><td>Curier</td><td>Fan Courier / DPD</td></tr>
+              <tr><td>Termen retur</td><td>14 zile de la primire</td></tr>
+              <tr><td>Condiții retur</td><td>Produs nemontat, în ambalaj original</td></tr>
+              <tr><td>Rambursare</td><td>5–7 zile lucrătoare</td></tr>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('productZone').innerHTML = html;
+    }
+
+    /* ============================================================
+      RENDER PRODUSE SIMILARE
+      Selecteaza produse din aceeasi categorie, exclude produsul curent.
+    ============================================================ */
+    function renderSimilar(product) {
+      const similar = allProducts
+        .filter(p => p.categorie === product.categorie && p.cod_oem !== product.cod_oem)
+        .slice(0, CONFIG.SIMILAR_COUNT);
+
+      if (similar.length === 0) return;
+
+      const html = `
+        <div class="similar-section" style="animation: fadeUp 0.5s ease 0.2s both;">
+          <h2 class="section-title">Produse <span>similare</span></h2>
+          <div class="similar-grid">
+            ${similar.map(p => `
+              <div class="similar-card" onclick="goToProduct('${p.cod_oem}')">
+                <div class="similar-img">
+                  ${p.imagine
+                    ? `<img src="${p.imagine}" alt="${p.nume}" loading="lazy" />`
+                    : `<span style="font-size:0.7rem;text-align:center;padding:0.5rem;">
+                        <!-- Joe: adauga imagine din JSON -->
+                        Fără imagine
+                       </span>`
+                  }
+                </div>
+                <div class="similar-body">
+                  <div class="similar-cat">${p.categorie}</div>
+                  <div class="similar-name">${p.nume}</div>
+                  <div class="similar-price">${p.pret} RON</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('similarSection').innerHTML = html;
+    }
+
+    /* ============================================================
+      RENDER NOT FOUND (404 stilizat)
+    ============================================================ */
+    function renderNotFound(msg) {
+      document.getElementById('breadcrumbProduct').textContent = 'Produs negăsit';
+      document.getElementById('productZone').innerHTML = `
+        <div class="not-found">
+          <div class="not-found-icon">🔍</div>
+          <h2>Produs negăsit</h2>
+          <p>${msg}</p>
+          <!-- Link inapoi la catalog -->
+          <a href="catalog.html">← Înapoi la catalog</a>
+        </div>
+      `;
+      document.getElementById('similarSection').innerHTML = '';
+    }
+
+    /* ============================================================
+      CANTITATE
+    ============================================================ */
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta);
+      const el = document.getElementById('qtyDisplay');
+      if (el) el.textContent = qty;
+    }
+
+    /* ============================================================
+      ADD TO CART
+    ============================================================ */
+    function handleAddToCart() {
+      if (!currentProduct) return;
+      addToCart(currentProduct, qty);
+    }
+
+    /* ============================================================
+      TABS
+    ============================================================ */
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const panel = document.getElementById('tab-' + id);
+      if (panel) panel.classList.add('active');
+      btn.classList.add('active');
+    }
+
+    /* ============================================================
+      NAVIGARE LA ALT PRODUS (din produse similare)
+    ============================================================ */
+    function goToProduct(codOem) {
+      window.location.href = `product-detail.html?cod=${encodeURIComponent(codOem)}`;
+    }
+
+    /* ============================================================
+      TOAST
+    ============================================================ */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* ============================================================
+      MOBILE NAV
+    ============================================================ */
+    function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+    function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+    /* ============================================================
+      INIT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartBadge();
+      loadProduct();
+    });
+  </script>
+
+</body>
+</html>

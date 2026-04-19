@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contul tău SeekParts – autentificare și înregistrare" />
+  <title>Contul meu – SeekParts</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #1a1a1a; --surface3: #222222;
+      --border: #2a2a2a; --accent: #e8ff00; --accent2: #ff4d00;
+      --text: #f0f0f0; --muted: #666666;
+      --radius: 14px; --radius-sm: 8px; --nav-h: 64px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; z-index: 1000;
+    }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text); letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .nav-icon-btn {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .nav-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .cart-count { background: var(--accent); color: #000; border-radius: 50%; width: 18px; height: 18px; font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; }
+    .mobile-nav { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); z-index: 999; padding: 1.5rem 2rem; flex-direction: column; gap: 0.75rem; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { color: var(--text); text-decoration: none; font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+
+    /* ============================================================
+       PAGE LAYOUT
+    ============================================================ */
+    .page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 2rem) 1.5rem 3rem;
+    }
+
+    /* ---- CARD PRINCIPAL ---- */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 460px;
+      overflow: hidden;
+      animation: fadeUp 0.4s ease;
+    }
+
+    /* ---- TAB SWITCH: Login / Înregistrare ---- */
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      background: none; border: none;
+      padding: 1.1rem;
+      font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .auth-tab:hover { color: var(--text); }
+    .auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ---- PANOURI ---- */
+    .auth-panel { padding: 2rem; display: none; animation: fadeUp 0.3s ease; }
+    .auth-panel.active { display: block; }
+
+    .auth-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+      margin-bottom: 0.4rem; letter-spacing: -0.5px;
+    }
+    .auth-title span { color: var(--accent); }
+
+    .auth-subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.75rem; line-height: 1.5; }
+
+    /* ---- FORMULAR ---- */
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 0.8rem; color: var(--muted); font-weight: 500; margin-bottom: 0.4rem; }
+    .form-label .req { color: var(--accent2); }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input.error { border-color: var(--accent2); }
+
+    /* wrapper cu icon ochi pentru parola */
+    .input-wrapper { position: relative; }
+    .input-wrapper .form-input { padding-right: 2.8rem; }
+    .toggle-pw {
+      position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .toggle-pw:hover { color: var(--text); }
+
+    .form-error { font-size: 0.75rem; color: var(--accent2); margin-top: 0.3rem; display: none; }
+    .form-error.show { display: block; }
+
+    /* fortat row */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* parola strength bar */
+    .pw-strength { margin-top: 0.5rem; }
+    .pw-strength-bar {
+      height: 3px; border-radius: 3px;
+      background: var(--surface3);
+      overflow: hidden; margin-bottom: 0.3rem;
+    }
+    .pw-strength-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.3s, background 0.3s;
+      width: 0%;
+    }
+    .pw-strength-label { font-size: 0.72rem; color: var(--muted); }
+
+    /* checkbox termeni */
+    .checkbox-row {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem;
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] { display: none; }
+    .custom-cb {
+      width: 16px; height: 16px; flex-shrink: 0;
+      border: 1.5px solid var(--border); border-radius: 4px;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; font-size: 0.65rem;
+    }
+    .checkbox-row.checked .custom-cb { background: var(--accent); border-color: var(--accent); color: #000; }
+    .checkbox-row a { color: var(--accent); text-decoration: none; }
+
+    /* forgot password link */
+    .forgot-link {
+      text-align: right; font-size: 0.78rem;
+      margin-top: -0.5rem; margin-bottom: 1rem;
+    }
+    .forgot-link a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .forgot-link a:hover { color: var(--accent); }
+
+    /* buton principal */
+    .btn-auth {
+      width: 100%; background: var(--accent); color: #000;
+      border: none; border-radius: var(--radius-sm);
+      padding: 0.9rem; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .btn-auth:hover { background: #fff; transform: translateY(-1px); }
+
+    /* separator */
+    .auth-sep {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.25rem 0; color: var(--muted); font-size: 0.78rem;
+    }
+    .auth-sep::before, .auth-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* butoane social login */
+    .social-btns { display: flex; gap: 0.75rem; }
+    .btn-social {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 0.75rem;
+      color: var(--muted); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-social:hover { border-color: #444; color: var(--text); }
+
+    /* ============================================================
+       PROFIL (afisat dupa login simulat)
+    ============================================================ */
+    .profile-panel {
+      display: none;
+      animation: fadeUp 0.4s ease;
+    }
+    .profile-panel.active { display: block; }
+
+    .profile-header {
+      background: var(--accent);
+      padding: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .profile-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .profile-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: #000; color: var(--accent);
+      font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 0.75rem; position: relative; z-index: 1;
+    }
+    .profile-name { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: #000; position: relative; z-index: 1; }
+    .profile-email { font-size: 0.82rem; color: rgba(0,0,0,0.6); position: relative; z-index: 1; margin-top: 0.2rem; }
+
+    .profile-menu { padding: 1rem 0; }
+    .profile-menu-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 2rem;
+      color: var(--muted); font-size: 0.9rem;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; border-left: 2px solid transparent;
+    }
+    .profile-menu-item:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); }
+    .profile-menu-item .menu-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+    .profile-menu-item .menu-arrow { margin-left: auto; color: var(--border); font-size: 0.8rem; }
+
+    .profile-menu-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+
+    .profile-menu-item.danger { color: var(--muted); }
+    .profile-menu-item.danger:hover { color: var(--accent2); background: rgba(255,77,0,0.05); border-left-color: var(--accent2); }
+
+    /* COMENZI goale */
+    .orders-empty {
+      padding: 2rem; text-align: center; color: var(--muted); font-size: 0.88rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+    }
+    .orders-empty-icon { font-size: 2.5rem; }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-stack { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent); border-radius: var(--radius-sm);
+      padding: 0.75rem 1.1rem; font-size: 0.85rem; color: var(--text);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      max-width: 300px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; color: var(--muted); font-size: 0.78rem; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+    @media (max-width: 768px) { .nav-links { display: none; } .hamburger { display: flex; } }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } .social-btns { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Acasă</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-icon-btn">
+        🛒 Coș <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="Meniu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html"   onclick="closeMobileNav()">Acasă</a>
+    <a href="catalog.html" onclick="closeMobileNav()">Catalog</a>
+    <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+    <a href="cart.html"    onclick="closeMobileNav()">Coș 🛒</a>
+  </div>
+
+  <!-- ============================================================
+    CONTINUT PAGINA
+  ============================================================ -->
+  <div class="page-wrapper">
+
+    <!-- CARD AUTH (login / register) -->
+    <div class="auth-card" id="authCard">
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login', this)">Autentificare</button>
+        <button class="auth-tab" onclick="switchTab('register', this)">Înregistrare</button>
+      </div>
+
+      <!-- ====================== LOGIN ====================== -->
+      <div class="auth-panel active" id="panel-login">
+        <h2 class="auth-title">Bine ai <span>revenit</span></h2>
+        <p class="auth-subtitle">Intră în cont pentru a-ți vedea comenzile și preferințele salvate.</p>
+
+        <div class="form-group">
+          <label class="form-label">Email <span class="req">*</span></label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="ion@email.ro" />
+          <div class="form-error" id="err-loginEmail">Email invalid</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Parolă <span class="req">*</span></label>
+          <div class="input-wrapper">
+            <input type="password" class="form-input" id="loginPw" placeholder="••••••••"
+                   onkeypress="if(event.key==='Enter') doLogin()" />
+            <button class="toggle-pw" onclick="togglePw('loginPw', this)" type="button">👁</button>
+          </div>
+          <div class="form-error" id="err-loginPw">Parola este obligatorie</div>
+        </div>
+
+        <div class="forgot-link"><a href="#" onclick="showForgot()">Ai uitat parola?</a></div>
+
+        <button class="btn-auth" onclick="doLogin()">Autentifică-te →</button>
+
+        <div class="auth-sep">sau continuă cu</div>
+
+        <div class="social-btns">
+          <!-- Joe: conecteaza la OAuth real (Google, Facebook)
+               folosind Firebase Auth sau un provider similar -->
+          <button class="btn-social" onclick="socialLogin('Google')">
+            <span>G</span> Google
+          </button>
+          <button class="btn-social" onclick="socialLogin('Facebook')">
+            <span>f</span> Facebook
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================== REGISTER ====================== -->
+      <div class="auth-panel" id="panel-register">
+        <h2 class="auth-title">Creează <span>cont</span></h2>
+        <p class="auth-subtitle">Înregistrează-te pentru comenzi rapide, istoric și oferte personalizate.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prenume <span class="req">*</span></label>
+            <input type="text" class="form-input" id="regFirst" placeholder="Ion" />
+            <div class="form-error" id="err-regFirst">Câmp obligatoriu</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nume <span class="req">*</span></label>
+            <input type="text" class="form-input" id="regLast" placeholder="Popescu" />
+            <div class="form-error" id="err-regLast">Câmp obligatoriu</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email <span class="req">*</span></label>
+          <input type="email" class="form-input" id="regEmail" placeholder="ion@email.ro" />
+          <div class="form-error" id="err-regEmail">Email invalid</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Telefon</label>
+          <input type="tel" class="form-input" id="regPhone" placeholder="07xx xxx xxx" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Parolă <span class="req">*</span></label>
+          <div class="input-wrapper">
+            <input type="password" class="form-input" id="regPw" placeholder="Minim 8 caractere"
+                   oninput="checkPwStrength(this.value)" />
+            <button class="toggle-pw" onclick="togglePw('regPw', this)" type="button">👁</button>
+          </div>
+          <div class="pw-strength">
+            <div class="pw-strength-bar">
+              <div class="pw-strength-fill" id="pwFill"></div>
+            </div>
+            <span class="pw-strength-label" id="pwLabel"></span>
+          </div>
+          <div class="form-error" id="err-regPw">Parola trebuie să aibă minim 8 caractere</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirmă parola <span class="req">*</span></label>
+          <div class="input-wrapper">
+            <input type="password" class="form-input" id="regPw2" placeholder="Repetă parola" />
+            <button class="toggle-pw" onclick="togglePw('regPw2', this)" type="button">👁</button>
+          </div>
+          <div class="form-error" id="err-regPw2">Parolele nu coincid</div>
+        </div>
+
+        <!-- checkbox termeni -->
+        <label class="checkbox-row" id="termsRow" onclick="toggleTerms()">
+          <input type="checkbox" id="termsCheck" />
+          <span class="custom-cb" id="termsCb"></span>
+          <span>
+            Sunt de acord cu
+            <a href="legal/termeni.html" onclick="event.stopPropagation()">Termenii și condițiile</a>
+            și
+            <a href="legal/confidentialitate.html" onclick="event.stopPropagation()">Politica de confidențialitate</a>
+          </span>
+        </label>
+        <div class="form-error" id="err-terms">Trebuie să accepți termenii</div>
+
+        <button class="btn-auth" onclick="doRegister()">Creează cont →</button>
+
+        <div class="auth-sep">sau continuă cu</div>
+
+        <div class="social-btns">
+          <button class="btn-social" onclick="socialLogin('Google')">
+            <span>G</span> Google
+          </button>
+          <button class="btn-social" onclick="socialLogin('Facebook')">
+            <span>f</span> Facebook
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+      PROFIL (afisat dupa login)
+      Joe: in productie, datele vin din backend/sesiune.
+      Momentan sunt simulate in localStorage.
+    ============================================================ -->
+    <div class="auth-card profile-panel" id="profilePanel">
+
+      <!-- header cu avatar -->
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <div class="profile-name" id="profileName">Utilizator</div>
+        <div class="profile-email" id="profileEmail">email@email.ro</div>
+      </div>
+
+      <!-- meniu profil -->
+      <div class="profile-menu">
+        <a href="cart.html" class="profile-menu-item">
+          <span class="menu-icon">🛒</span> Coșul meu
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="#" class="profile-menu-item" onclick="showOrders()">
+          <span class="menu-icon">📦</span> Comenzile mele
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="#" class="profile-menu-item" onclick="showWishlist()">
+          <span class="menu-icon">♡</span> Favorite
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="#" class="profile-menu-item" onclick="showAddresses()">
+          <span class="menu-icon">📍</span> Adresele mele
+          <span class="menu-arrow">›</span>
+        </a>
+
+        <div class="profile-menu-divider"></div>
+
+        <a href="#" class="profile-menu-item" onclick="showEditProfile()">
+          <span class="menu-icon">✏️</span> Editează profilul
+          <span class="menu-arrow">›</span>
+        </a>
+
+        <div class="profile-menu-divider"></div>
+
+        <a href="#" class="profile-menu-item danger" onclick="doLogout()">
+          <span class="menu-icon">🚪</span> Deconectare
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <p>
+      © 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 ·
+      <a href="legal/termeni.html">Termeni</a> ·
+      <a href="legal/confidentialitate.html">Confidențialitate</a>
+    </p>
+  </footer>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script>
+    /* ============================================================
+      NOTE PENTRU JOE:
+      Autentificarea e simulata cu localStorage.
+      In productie, inlocuieste doLogin() si doRegister() cu
+      apeluri fetch() catre un backend real (Node.js, PHP, Firebase etc.)
+      Cheia 'seekparts_user' e folosita pentru sesiunea simulata.
+    ============================================================ */
+
+    /* ---- CART BADGE ---- */
+    function updateCartBadge() {
+      try {
+        const cart = JSON.parse(localStorage.getItem('seekparts_cart') || '[]');
+        document.getElementById('cartCount').textContent = cart.reduce((s,i) => s + i.qty, 0);
+      } catch {}
+    }
+
+    /* ---- SESIUNE SIMULATA ---- */
+    function getSession() {
+      try { return JSON.parse(localStorage.getItem('seekparts_user')); }
+      catch { return null; }
+    }
+
+    function setSession(user) {
+      localStorage.setItem('seekparts_user', JSON.stringify(user));
+    }
+
+    function clearSession() {
+      localStorage.removeItem('seekparts_user');
+    }
+
+    /* ---- SWITCH TAB LOGIN / REGISTER ---- */
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+
+    /* ---- TOGGLE PAROLA VIZIBILA ---- */
+    function togglePw(inputId, btn) {
+      const inp = document.getElementById(inputId);
+      if (!inp) return;
+      const isText = inp.type === 'text';
+      inp.type = isText ? 'password' : 'text';
+      btn.textContent = isText ? '👁' : '🙈';
+    }
+
+    /* ---- PUTERE PAROLA ---- */
+    function checkPwStrength(pw) {
+      const fill  = document.getElementById('pwFill');
+      const label = document.getElementById('pwLabel');
+      if (!fill || !label) return;
+
+      let score = 0;
+      if (pw.length >= 8)  score++;
+      if (pw.length >= 12) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+      const levels = [
+        { pct: '20%',  color: '#ff4d00', label: 'Foarte slabă' },
+        { pct: '40%',  color: '#ff8c00', label: 'Slabă' },
+        { pct: '60%',  color: '#ffcc00', label: 'Medie' },
+        { pct: '80%',  color: '#99dd00', label: 'Bună' },
+        { pct: '100%', color: '#00c864', label: 'Foarte puternică' },
+      ];
+
+      const l = levels[Math.min(score, 4)];
+      fill.style.width     = pw.length ? l.pct : '0%';
+      fill.style.background = l.color;
+      label.textContent    = pw.length ? l.label : '';
+      label.style.color    = l.color;
+    }
+
+    /* ---- CHECKBOX TERMENI ---- */
+    function toggleTerms() {
+      const row = document.getElementById('termsRow');
+      const cb  = document.getElementById('termsCb');
+      const inp = document.getElementById('termsCheck');
+      const isChecked = row.classList.toggle('checked');
+      cb.textContent  = isChecked ? '✓' : '';
+      inp.checked     = isChecked;
+    }
+
+    /* ---- VALIDARE HELPER ---- */
+    function showErr(id, show) {
+      const el = document.getElementById('err-' + id);
+      if (el) el.classList.toggle('show', show);
+      const inp = document.getElementById(id);
+      if (inp) inp.classList.toggle('error', show);
+    }
+
+    /* ============================================================
+      LOGIN
+    ============================================================ */
+    function doLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pw    = document.getElementById('loginPw').value;
+
+      let ok = true;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      showErr('loginEmail', !emailOk); if (!emailOk) ok = false;
+      showErr('loginPw',    !pw);      if (!pw)      ok = false;
+
+      if (!ok) return;
+
+      /* ---- SIMULARE LOGIN ----
+         Joe: inlocuieste acest bloc cu un fetch() la backend:
+           const res = await fetch('/api/login', { method:'POST', body: JSON.stringify({email,pw}) });
+           const data = await res.json();
+           if (data.ok) setSession(data.user);
+      */
+      const stored = localStorage.getItem('seekparts_reg_' + email);
+      if (!stored) {
+        showToast('⚠️ Nu există un cont cu acest email.');
+        return;
+      }
+      const user = JSON.parse(stored);
+      if (user.pw !== pw) {
+        showToast('⚠️ Parolă incorectă.');
+        document.getElementById('loginPw').classList.add('error');
+        return;
+      }
+
+      setSession({ email: user.email, firstName: user.firstName, lastName: user.lastName });
+      showProfile(getSession());
+      showToast(`✓ Bun venit, ${user.firstName}!`);
+    }
+
+    /* ============================================================
+      REGISTER
+    ============================================================ */
+    function doRegister() {
+      const first  = document.getElementById('regFirst').value.trim();
+      const last   = document.getElementById('regLast').value.trim();
+      const email  = document.getElementById('regEmail').value.trim();
+      const pw     = document.getElementById('regPw').value;
+      const pw2    = document.getElementById('regPw2').value;
+      const terms  = document.getElementById('termsCheck').checked;
+
+      let ok = true;
+      showErr('regFirst', first.length < 2);  if (first.length < 2) ok = false;
+      showErr('regLast',  last.length < 2);   if (last.length < 2)  ok = false;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      showErr('regEmail', !emailOk); if (!emailOk) ok = false;
+      showErr('regPw',  pw.length < 8);       if (pw.length < 8) ok = false;
+      showErr('regPw2', pw !== pw2);           if (pw !== pw2)    ok = false;
+      showErr('terms',  !terms);               if (!terms)        ok = false;
+
+      if (!ok) return;
+
+      /* ---- SIMULARE INREGISTRARE ----
+         Joe: inlocuieste cu fetch() la backend.
+      */
+      if (localStorage.getItem('seekparts_reg_' + email)) {
+        showToast('⚠️ Există deja un cont cu acest email.');
+        return;
+      }
+
+      localStorage.setItem('seekparts_reg_' + email, JSON.stringify({ email, firstName: first, lastName: last, pw }));
+      setSession({ email, firstName: first, lastName: last });
+      showProfile(getSession());
+      showToast(`🎉 Cont creat cu succes! Bun venit, ${first}!`);
+    }
+
+    /* ============================================================
+      SOCIAL LOGIN (placeholder)
+      Joe: integreaza Firebase Auth sau alt provider OAuth.
+    ============================================================ */
+    function socialLogin(provider) {
+      showToast(`🔗 ${provider} login – conectează la Firebase Auth sau un provider OAuth.`);
+    }
+
+    /* ============================================================
+      FORGOT PASSWORD
+    ============================================================ */
+    function showForgot() {
+      showToast('📧 Funcționalitate reset parolă – conectează la backend pentru trimitere email.');
+    }
+
+    /* ============================================================
+      AFISARE PROFIL
+    ============================================================ */
+    function showProfile(user) {
+      document.getElementById('authCard').style.display    = 'none';
+      document.getElementById('profilePanel').classList.add('active');
+
+      const fullName = `${user.firstName} ${user.lastName}`;
+      document.getElementById('profileName').textContent  = fullName;
+      document.getElementById('profileEmail').textContent = user.email;
+      /* avatar = prima litera a prenumelui */
+      document.getElementById('profileAvatar').textContent = user.firstName[0].toUpperCase();
+    }
+
+    /* ============================================================
+      LOGOUT
+    ============================================================ */
+    function doLogout() {
+      clearSession();
+      document.getElementById('profilePanel').classList.remove('active');
+      document.getElementById('authCard').style.display = '';
+      showToast('👋 Te-ai deconectat cu succes.');
+    }
+
+    /* ============================================================
+      MENIU PROFIL – placeholder-uri
+      Joe: implementeaza paginile/sectiunile corespunzatoare
+    ============================================================ */
+    function showOrders() {
+      showToast('📦 Secțiunea comenzi – conectează la backend pentru istoricul comenzilor.');
+    }
+    function showWishlist() {
+      showToast('♡ Lista de favorite – salveaza produsele in localStorage sau backend.');
+    }
+    function showAddresses() {
+      showToast('📍 Adresele salvate – conectează la backend pentru gestionare adrese.');
+    }
+    function showEditProfile() {
+      showToast('✏️ Editare profil – conectează la backend pentru actualizare date.');
+    }
+
+    /* ============================================================
+      TOAST
+    ============================================================ */
+    function showToast(html) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      stack.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    }
+
+    /* MOBILE NAV */
+    function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+    function closeMobileNav()  { document.getElementById('mobileNav').classList.remove('open'); }
+
+    /* ============================================================
+      INIT
+      Verifica daca exista sesiune activa si afiseaza profilul direct.
+      Citeste si ?tab=register din URL pentru a deschide tab-ul corect.
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartBadge();
+
+      /* sesiune activa → arata profil direct */
+      const session = getSession();
+      if (session) {
+        showProfile(session);
+        return;
+      }
+
+      /* ?tab=register → deschide tab-ul de inregistrare */
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('tab') === 'register') {
+        switchTab('register', document.querySelectorAll('.auth-tab')[1]);
+      }
+    });
+  </script>
+
+</body>
+</html>

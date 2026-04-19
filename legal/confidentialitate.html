@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Politica de confidențialitate și protecția datelor personale – SeekParts SRL" />
+  <title>Politica de Confidențialitate – SeekParts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;--border:#2a2a2a;--accent:#e8ff00;--text:#f0f0f0;--muted:#666666;--radius:14px;--radius-sm:8px;--nav-h:64px;}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+    nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(10,10,10,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;z-index:1000;}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;text-decoration:none;color:var(--text);letter-spacing:-0.5px;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{color:var(--muted);font-size:0.88rem;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--accent);}
+    .page-content{max-width:760px;margin:0 auto;padding:calc(var(--nav-h)+3rem) 2rem 5rem;}
+    .legal-header{margin-bottom:3rem;}
+    .legal-tag{display:inline-block;background:rgba(232,255,0,0.1);border:1px solid rgba(232,255,0,0.2);border-radius:50px;padding:0.3rem 0.9rem;font-size:0.75rem;color:var(--accent);font-weight:600;margin-bottom:1rem;}
+    .legal-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-1px;margin-bottom:0.5rem;}
+    .legal-title span{color:var(--accent);}
+    .legal-meta{color:var(--muted);font-size:0.82rem;}
+    .legal-toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:2.5rem;}
+    .legal-toc h4{font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;}
+    .legal-toc ol{padding-left:1.25rem;display:flex;flex-direction:column;gap:0.4rem;}
+    .legal-toc a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+    .legal-toc a:hover{color:var(--accent);}
+    .legal-section{margin-bottom:2.5rem;scroll-margin-top:calc(var(--nav-h)+1rem);}
+    .legal-section h2{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--accent);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+    .legal-section p{color:var(--muted);line-height:1.8;font-size:0.9rem;margin-bottom:0.75rem;}
+    .legal-section p strong{color:var(--text);}
+    .legal-section ul{padding-left:1.25rem;color:var(--muted);font-size:0.9rem;line-height:1.8;display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.75rem;}
+    .info-box{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1rem;}
+    .info-box p{color:var(--text);font-size:0.85rem;margin:0;}
+    .rights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-top:0.75rem;}
+    .right-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;}
+    .right-card h4{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:0.4rem;}
+    .right-card p{color:var(--muted);font-size:0.78rem;line-height:1.5;margin:0;}
+    footer{background:var(--surface);border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;color:var(--muted);font-size:0.78rem;}
+    footer a{color:var(--muted);text-decoration:none;}
+    footer a:hover{color:var(--accent);}
+    .legal-nav{display:flex;gap:1rem;flex-wrap:wrap;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+    .legal-nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:0.6rem 1.2rem;border-radius:var(--radius-sm);text-decoration:none;font-size:0.82rem;transition:all 0.2s;}
+    .legal-nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">Seek<span>Parts</span></a>
+    <a href="../index.html" class="nav-back">← Înapoi la magazin</a>
+  </nav>
+
+  <div class="page-content">
+    <div class="legal-header">
+      <div class="legal-tag">GDPR · Document legal</div>
+      <h1 class="legal-title">Politica de <span>Confidențialitate</span></h1>
+      <p class="legal-meta">Ultima actualizare: 1 ianuarie 2025 · Conform Regulamentului (UE) 2016/679 (GDPR)</p>
+    </div>
+
+    <div class="legal-toc">
+      <h4>Cuprins</h4>
+      <ol>
+        <li><a href="#s1">Operatorul de date</a></li>
+        <li><a href="#s2">Date personale colectate</a></li>
+        <li><a href="#s3">Scopul și temeiul prelucrării</a></li>
+        <li><a href="#s4">Durata retenției datelor</a></li>
+        <li><a href="#s5">Destinatarii datelor</a></li>
+        <li><a href="#s6">Drepturile persoanelor vizate</a></li>
+        <li><a href="#s7">Cookies</a></li>
+        <li><a href="#s8">Securitatea datelor</a></li>
+        <li><a href="#s9">Contact și reclamații</a></li>
+      </ol>
+    </div>
+
+    <div class="legal-section" id="s1">
+      <h2>1. Operatorul de date</h2>
+      <div class="info-box">
+        <p><strong>SeekParts SRL</strong> · CUI: RO12345678 · J40/1234/2025<br>
+        Str. Industriilor 42, 300000 Timișoara, România<br>
+        DPO: dpo@seekparts.ro · Tel: 0256 123 456</p>
+      </div>
+      <p>SeekParts SRL, în calitate de operator de date cu caracter personal, se angajează să protejeze confidențialitatea și securitatea datelor tale personale în conformitate cu GDPR și legislația română în vigoare.</p>
+    </div>
+
+    <div class="legal-section" id="s2">
+      <h2>2. Date personale colectate</h2>
+      <p>Colectăm următoarele categorii de date:</p>
+      <ul>
+        <li><strong>Date de identificare:</strong> nume, prenume, adresă email, număr de telefon</li>
+        <li><strong>Date de livrare:</strong> adresă poștală completă (stradă, oraș, județ, cod poștal)</li>
+        <li><strong>Date de facturare:</strong> date necesare emiterii facturilor fiscale</li>
+        <li><strong>Date de cont:</strong> adresă email și parolă criptată (pentru conturile de utilizator)</li>
+        <li><strong>Date de navigare:</strong> adresă IP, tip browser, pagini accesate, durata sesiunii (prin cookies)</li>
+        <li><strong>Date despre comenzi:</strong> istoricul achizițiilor și preferințele de produse</li>
+      </ul>
+      <p>Nu colectăm date sensibile (date de sănătate, origine etnică, convingeri religioase etc.) și nu colectăm date de la minori sub 16 ani.</p>
+    </div>
+
+    <div class="legal-section" id="s3">
+      <h2>3. Scopul și temeiul prelucrării</h2>
+      <p>Prelucrăm datele tale în baza următoarelor temeiuri legale:</p>
+      <ul>
+        <li><strong>Executarea contractului</strong> (art. 6(1)(b) GDPR) – procesarea comenzilor, livrare, facturare, suport clienți</li>
+        <li><strong>Obligație legală</strong> (art. 6(1)(c) GDPR) – păstrarea documentelor fiscale conform legislației române</li>
+        <li><strong>Interes legitim</strong> (art. 6(1)(f) GDPR) – prevenirea fraudei, securitatea platformei, statistici anonimizate</li>
+        <li><strong>Consimțământ</strong> (art. 6(1)(a) GDPR) – email marketing, cookies de analiză și marketing (poți retrage oricând)</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="s4">
+      <h2>4. Durata retenției datelor</h2>
+      <ul>
+        <li><strong>Date comenzi și facturi:</strong> 5 ani (obligație legală fiscală)</li>
+        <li><strong>Date cont utilizator:</strong> pe durata existenței contului + 1 an după ștergere</li>
+        <li><strong>Date marketing (newsletter):</strong> până la retragerea consimțământului</li>
+        <li><strong>Date cookies analytics:</strong> 13 luni maximum</li>
+        <li><strong>Loguri de securitate:</strong> 6 luni</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="s5">
+      <h2>5. Destinatarii datelor</h2>
+      <p>Datele tale pot fi transmise către:</p>
+      <ul>
+        <li><strong>Parteneri de curierat</strong> (Fan Courier, DPD) – pentru livrarea comenzilor</li>
+        <li><strong>Procesatori de plăți</strong> (Stripe, PayPal) – pentru procesarea tranzacțiilor</li>
+        <li><strong>Furnizori de servicii IT</strong> (hosting, email) – în baza unor contracte de prelucrare</li>
+        <li><strong>Autorități publice</strong> – când suntem obligați legal (ANAF, instanțe judecătorești)</li>
+      </ul>
+      <p>Nu vindem, nu închiriem și nu transferăm datele tale unor terți în scopuri comerciale proprii ale acestora.</p>
+    </div>
+
+    <div class="legal-section" id="s6">
+      <h2>6. Drepturile tale</h2>
+      <p>Conform GDPR, beneficiezi de următoarele drepturi:</p>
+      <div class="rights-grid">
+        <div class="right-card">
+          <h4>Dreptul de acces</h4>
+          <p>Poți solicita o copie a datelor pe care le deținem despre tine.</p>
+        </div>
+        <div class="right-card">
+          <h4>Dreptul la rectificare</h4>
+          <p>Poți corecta datele inexacte sau incomplete.</p>
+        </div>
+        <div class="right-card">
+          <h4>Dreptul la ștergere</h4>
+          <p>Poți solicita ștergerea datelor în anumite condiții.</p>
+        </div>
+        <div class="right-card">
+          <h4>Dreptul la portabilitate</h4>
+          <p>Primești datele în format structurat, lizibil automat.</p>
+        </div>
+        <div class="right-card">
+          <h4>Dreptul la opoziție</h4>
+          <p>Te poți opune prelucrării în scop de marketing direct.</p>
+        </div>
+        <div class="right-card">
+          <h4>Dreptul la restricție</h4>
+          <p>Poți solicita restricționarea prelucrării în anumite situații.</p>
+        </div>
+      </div>
+      <p style="margin-top:1rem">Pentru exercitarea oricărui drept, trimite o cerere la <strong>privacy@seekparts.ro</strong>. Vom răspunde în termen de <strong>30 de zile</strong>.</p>
+    </div>
+
+    <div class="legal-section" id="s7">
+      <h2>7. Cookies</h2>
+      <p>Folosim următoarele categorii de cookies:</p>
+      <ul>
+        <li><strong>Cookies necesare</strong> – funcționarea coșului de cumpărături, sesiunea de autentificare (nu pot fi dezactivate)</li>
+        <li><strong>Cookies de performanță</strong> – Google Analytics (anonimizat), statistici de utilizare</li>
+        <li><strong>Cookies de marketing</strong> – reclame personalizate, retargeting (necesită consimțământ)</li>
+      </ul>
+      <p>Poți gestiona preferințele privind cookies din setările browserului tău sau prin banner-ul de cookies la prima vizită.</p>
+    </div>
+
+    <div class="legal-section" id="s8">
+      <h2>8. Securitatea datelor</h2>
+      <p>Implementăm măsuri tehnice și organizatorice adecvate pentru protejarea datelor tale:</p>
+      <ul>
+        <li>Transmiterea datelor criptată prin <strong>SSL/TLS</strong></li>
+        <li>Parolele stocate prin algoritmi de hashing (bcrypt)</li>
+        <li>Acces restricționat la date pe baza principiului „need-to-know"</li>
+        <li>Backup-uri regulate și monitorizare continuă a securității</li>
+      </ul>
+      <p>În cazul unei breșe de securitate care afectează datele tale, vei fi notificat în conformitate cu obligațiile GDPR.</p>
+    </div>
+
+    <div class="legal-section" id="s9">
+      <h2>9. Contact și reclamații</h2>
+      <p>Pentru orice întrebare legată de prelucrarea datelor tale personale, contactează-ne la:<br>
+      <strong>privacy@seekparts.ro</strong> sau prin poștă la adresa sediului social.</p>
+      <p>Dacă consideri că drepturile îți sunt încălcate, poți depune o reclamație la <strong>Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP)</strong>:<br>
+      Website: <strong>www.dataprotection.ro</strong> · Tel: +40 318 059 211</p>
+    </div>
+
+    <div class="legal-nav">
+      <a href="termeni.html" class="legal-nav-btn">← Termeni și condiții</a>
+      <a href="retur.html" class="legal-nav-btn">Politica de retur →</a>
+      <a href="garantie.html" class="legal-nav-btn">Politica de garanție →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 <strong>SeekParts SRL</strong> · CUI: RO12345678 · <a href="../contact.html">Contact</a></p>
+  </footer>
+</body>
+</html>
